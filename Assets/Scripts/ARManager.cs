@@ -32,13 +32,14 @@ public class ARManager : MonoBehaviour
             }
 
             if (obj == null) {
-                if (raycastManager.Raycast(touch.position, raycastHitList, TrackableType.Planes)) {
+                if (raycastManager.Raycast(touch.position, raycastHitList, TrackableType.PlaneWithinPolygon)) {
                     Debug.Log("Raycast成功");
 
                     ///Vector3 posY = new Vector3(raycastHitList[0].pose.position.x, raycastHitList[0].pose.position.y + 0.3f, raycastHitList[0].pose.position.z + 1f);
 
+                    Pose hitPose = raycastHitList[0].pose;
 
-                    obj = Instantiate(objPrefab, raycastHitList[0].pose.position, Quaternion.identity);
+                    obj = Instantiate(objPrefab, hitPose.position, hitPose.rotation);
                 } else {
                     Debug.Log("RayCast失敗");
                 }
