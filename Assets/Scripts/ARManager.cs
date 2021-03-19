@@ -12,11 +12,15 @@ public class ARManager : MonoBehaviour
     [SerializeField]
     private UIManager uiManager;
 
+    private PlaneDetection planeDetection;
+    
     private GameObject obj;
 
     private ARRaycastManager raycastManager;
 
     private List<ARRaycastHit> raycastHitList = new List<ARRaycastHit>();
+
+
 
     public enum ARState {
         Tracking,     // 平面感知中
@@ -33,6 +37,7 @@ public class ARManager : MonoBehaviour
     void Awake() {
         raycastManager = GetComponent<ARRaycastManager>();
         currentARState = ARState.Tracking;
+        planeDetection = GetComponent<PlaneDetection>();
     }
 
 
@@ -93,5 +98,8 @@ public class ARManager : MonoBehaviour
         yield return new WaitForSeconds(2.0f);
 
         currentARState = ARState.Play;
+
+        // 平面検知を非表示
+        planeDetection.SetAllPlaneActivate(false);
     }
 }
