@@ -7,10 +7,15 @@ public class BulletGenerator : MonoBehaviour
     [SerializeField]
     private Bullet bulletPrefab = null;
 
+    [SerializeField]
+    private ARManager arManager;
+
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) {
-            GenerateBullet();
+        if (arManager.currentARState == ARManager.ARState.Play) {
+            if (Input.GetMouseButtonDown(0)) {
+                GenerateBullet();
+            }
         }
     }
 
