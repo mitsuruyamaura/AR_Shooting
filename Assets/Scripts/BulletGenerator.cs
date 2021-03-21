@@ -10,9 +10,17 @@ public class BulletGenerator : MonoBehaviour
     [SerializeField]
     private ARManager arManager;
 
+    public bool isDebugEditor;
+
+    void Start() {
+        if (isDebugEditor) {
+            arManager = null;
+        }
+    }
+
     void Update()
     {
-        if (arManager.currentARState == ARManager.ARState.Play) {
+        if ((arManager != null && arManager.currentARState == ARManager.ARState.Play) || isDebugEditor) {
             if (Input.GetMouseButtonDown(0)) {
                 GenerateBullet();
             }

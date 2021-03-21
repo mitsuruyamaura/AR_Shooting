@@ -20,7 +20,6 @@ public class TargetGenerator : MonoBehaviour
     /// <returns></returns>
     public IEnumerator GenerateAnimals() {
         while (true) {
-
             Instantiate(animalPrefab, animalTran).MoveAnimal();
             yield return new WaitForSeconds(3.0f);
         }
