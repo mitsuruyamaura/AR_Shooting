@@ -23,6 +23,7 @@ public class ARManager : MonoBehaviour
 
 
     public enum ARState {
+        None,
         Tracking,     // 平面感知中
         Wait,         // 待機。どこのステートにも属さない状態
         Ready,        // ゲーム準備中
@@ -36,13 +37,19 @@ public class ARManager : MonoBehaviour
 
     void Awake() {
         raycastManager = GetComponent<ARRaycastManager>();
-        currentARState = ARState.Tracking;
+
         planeDetection = GetComponent<PlaneDetection>();
+
+        //currentARState = ARState.Tracking;
     }
 
 
     void Update()
     {
+        if (currentARState == ARState.None) {
+            return;
+        }
+
         if (Input.touchCount < 0) {
             return;        
         }
