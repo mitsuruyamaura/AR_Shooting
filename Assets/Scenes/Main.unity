@@ -931,13 +931,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2172f16114a3b8f48b64d71320645910, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventTypes: 0000000000000000
-  eventTrans:
-  - {fileID: 554405479}
-  - {fileID: 865382564}
-  eventData:
-  - eventType: 0
-    eventTran: {fileID: 0}
+  eventDatas:
+  - eventNo: 0
+    eventTran: {fileID: 554405479}
 --- !u!65 &1568670065
 BoxCollider:
   m_ObjectHideFlags: 0
