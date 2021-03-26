@@ -1,0 +1,10 @@
+/// <summary>
+/// ƒCƒxƒ“ƒg‚ÌŽí—Þ
+/// </summary>
+public enum EventType { 
+    Enemy,
+    Gimmick,
+    Trap,
+    Treasure,
+    Item
+}
