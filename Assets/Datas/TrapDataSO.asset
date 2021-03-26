@@ -10,11 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d99e114432b7af0428c80eac7994e982, type: 3}
-  m_Name: EventDataSO
+  m_Name: TrapDataSO
   m_EditorClassIdentifier: 
-  eventType: 0
-  eventDatasList:
-  - eventNo: 0
-    eventTran: {fileID: 0}
-  - eventNo: 0
-    eventTran: {fileID: 0}
+  eventType: 2
+  eventDatasList: []

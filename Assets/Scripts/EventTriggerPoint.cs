@@ -5,8 +5,11 @@ using UnityEngine;
 public class EventTriggerPoint : MonoBehaviour {
     private GameManager gameManager;
 
-    //[SerializeField, Header("発生するイベントの種類")]
-    //private EventType[] eventTypes;
+    [SerializeField, Header("発生するイベントの種類")]
+    private EventType[] eventTypes;
+
+    [SerializeField]
+    private int[] eventNos;
 
     //[SerializeField, Tooltip("イベントの生成地点")]
     //private Transform[] eventTrans;
@@ -16,6 +19,12 @@ public class EventTriggerPoint : MonoBehaviour {
 
     public void SetUpEventTriggerPoint(GameManager gameManager) {
         this.gameManager = gameManager;
+
+        eventDatas = new EventDataSO.EventData[eventTypes.Length];
+
+        for (int i = 0; i < eventTypes.Length; i++) {
+            eventDatas[i] = DataBaseManager.instance.GetEventDataFromEventType(eventTypes[i], eventNos[i]);
+        }
     }
 
     private void OnTriggerEnter(Collider other) {
@@ -23,7 +32,7 @@ public class EventTriggerPoint : MonoBehaviour {
             Debug.Log("通過");
 
             // イベントの生成
-            gameManager.GenerateEvent(eventDatas);
+            gameManager.GenerateEvent(eventDatas, eventTypes);
         }
     }
 }
