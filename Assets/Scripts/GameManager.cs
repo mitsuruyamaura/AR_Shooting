@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
-{
+public class GameManager : MonoBehaviour {
     [SerializeField]
     private EventTriggerPoint[] eventTriggerPoint;
 
@@ -22,14 +21,14 @@ public class GameManager : MonoBehaviour
             eventTriggerPoint[i].SetUpEventTriggerPoint(this);
         }
         yield return null;
-    } 
+    }
 
-    public void GenerateEvent(EventType[] eventTypes, Transform[] generateTrans) {
+    public void GenerateEvent(EventDataSO.EventData[] eventDatas) {
 
         // イベントの種類に応じてスクリプタブル・オブジェクトからデータを検索
 
-        for (int i = 0; i < eventTypes.Length; i++) {
-            GameObject enemy = Instantiate(enemyPrefab, generateTrans[i]);
+        for (int i = 0; i < eventDatas.Length; i++) {
+            GameObject enemy = Instantiate(enemyPrefab, eventDatas[i].eventTran);
             enemiesList.Add(enemy);
         }
     }

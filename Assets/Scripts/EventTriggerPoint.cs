@@ -2,18 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EventTriggerPoint : MonoBehaviour
-{
+public class EventTriggerPoint : MonoBehaviour {
     private GameManager gameManager;
 
-    [SerializeField, Header("発生するイベントの種類")]
-    private EventType[] eventTypes;
+    //[SerializeField, Header("発生するイベントの種類")]
+    //private EventType[] eventTypes;
 
-    [SerializeField, Tooltip("イベントの生成地点")]
-    private Transform[] eventTrans;
+    //[SerializeField, Tooltip("イベントの生成地点")]
+    //private Transform[] eventTrans;
 
-    [SerializeField]
-    private EventData[] eventData;
+    [SerializeField, Header("発生するイベント")]
+    private EventDataSO.EventData[] eventDatas;
 
     public void SetUpEventTriggerPoint(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -24,7 +23,7 @@ public class EventTriggerPoint : MonoBehaviour
             Debug.Log("通過");
 
             // イベントの生成
-            gameManager.GenerateEvent(eventTypes, eventTrans);
+            gameManager.GenerateEvent(eventDatas);
         }
     }
 }
