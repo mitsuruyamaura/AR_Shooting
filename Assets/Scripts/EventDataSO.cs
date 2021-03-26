@@ -13,6 +13,6 @@ public class EventDataSO : ScriptableObject {
     [Serializable]
     public class EventData {
         public int eventNo;
-        public Transform eventTran;
+        public GameObject eventPrefab;
     }
 }

@@ -8,12 +8,6 @@ public class GameManager : MonoBehaviour {
     private EventTriggerPoint[] eventTriggerPoint;
 
     [SerializeField]
-    private GameObject enemyPrefab;
-
-    [SerializeField]
-    private GameObject gimmickPrefab;
-
-    [SerializeField]
     private List<GameObject> enemiesList = new List<GameObject>();
 
     [SerializeField]
@@ -24,6 +18,10 @@ public class GameManager : MonoBehaviour {
         yield return StartCoroutine(PreparateGame());
     }
 
+    /// <summary>
+    /// ゲームの準備
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator PreparateGame() {
         for (int i = 0; i < eventTriggerPoint.Length; i++) {
             eventTriggerPoint[i].SetUpEventTriggerPoint(this);
@@ -31,23 +29,23 @@ public class GameManager : MonoBehaviour {
         yield return null;
     }
 
-    public void GenerateEvent(EventDataSO.EventData[] eventDatas, EventType[] eventTypes) {
+    /// <summary>
+    /// エネミーの生成イベント
+    /// </summary>
+    /// <param name="enemyEventData"></param>
+    /// <param name="enemyEventTran"></param>
+    public void GenerateEnemy(EventDataSO.EventData enemyEventData, Transform enemyEventTran) {
+        GameObject enemy = Instantiate(enemyEventData.eventPrefab, enemyEventTran);
+        enemiesList.Add(enemy);
+    }
 
-        // イベントの種類に応じてスクリプタブル・オブジェクトからデータを検索
-       
-        for (int i = 0; i < eventDatas.Length; i++) {
-            switch (eventTypes[i]) {
-                case EventType.Enemy:
-                    GameObject enemy = Instantiate(enemyPrefab, eventDatas[i].eventTran);
-                    enemiesList.Add(enemy);
-
-                    continue;
-
-                case EventType.Gimmick:
-                    GameObject gimmick = Instantiate(enemyPrefab, eventDatas[i].eventTran);
-                    gimmicksList.Add(gimmick);
-                    continue;
-            }
-        }
+    /// <summary>
+    /// ギミックの生成イベント
+    /// </summary>
+    /// <param name="enemyEventData"></param>
+    /// <param name="enemyEventTran"></param>
+    public void GenerateGimmick(EventDataSO.EventData enemyEventData, Transform enemyEventTran) {
+        GameObject enemy = Instantiate(enemyEventData.eventPrefab, enemyEventTran);
+        gimmicksList.Add(enemy);
     }
 }

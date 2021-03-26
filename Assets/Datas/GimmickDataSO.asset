@@ -13,4 +13,7 @@ MonoBehaviour:
   m_Name: GimmickDataSO
   m_EditorClassIdentifier: 
   eventType: 1
-  eventDatasList: []
+  eventDatasList:
+  - eventNo: 0
+    eventPrefab: {fileID: 7046184766197172480, guid: e22f0f867b3086a4e88ef66a8bfc7159,
+      type: 3}
