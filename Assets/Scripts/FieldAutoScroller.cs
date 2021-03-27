@@ -22,6 +22,12 @@ public class FieldAutoScroller : MonoBehaviour
     [SerializeField, Tooltip("一時停止可能回数")]
     private int stopMotionCount;
 
+    [SerializeField]
+    private UIManager uiManager;
+
+    [SerializeField]
+    private GameManager gameManager;
+ 
 
     IEnumerator Start() {
         yield return null;
@@ -30,7 +36,9 @@ public class FieldAutoScroller : MonoBehaviour
         float totalTime = pathDatasList.Select(x => x.scrollTime).Sum();
 
         Debug.Log(totalTime);
-        tween = transform.DOPath(paths, totalTime).SetEase(Ease.Linear); 
+        tween = transform.DOPath(paths, totalTime).SetEase(Ease.Linear);
+
+        uiManager.UpdateDisplayStopMotionCount(stopMotionCount);
     }
 
     private void Update() {
@@ -44,9 +52,16 @@ public class FieldAutoScroller : MonoBehaviour
     public void StopAndPlayMotion() {
         if (isPause) {
             transform.DOPlay();
+            gameManager.ResumeMoveAllEnemies();
+
         } else if (!isPause && stopMotionCount > 0) {
             transform.DOPause();
+            gameManager.StopMoveAllEnemies();
+
             stopMotionCount--;
+
+            // 表示更新
+            uiManager.UpdateDisplayStopMotionCount(stopMotionCount);
         }
         isPause = !isPause;
     }

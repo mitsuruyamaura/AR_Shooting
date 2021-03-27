@@ -26,6 +26,20 @@ public class AnimalController : MonoBehaviour
             .OnComplete(() => { Destroy(gameObject); });
     }
 
+    /// <summary>
+    /// ˆÚ“®‚ğˆê’â~
+    /// </summary>
+    public void StopMoveAnimal() {
+        tween.Pause();
+    }
+
+    /// <summary>
+    /// ˆÚ“®‚ğÄŠJ
+    /// </summary>
+    public void ResumeMoveAnimal() {
+        tween.Play();
+    }
+
     public void SetUpAnimalController(GameObject player) {
         lookTarget = player;
 

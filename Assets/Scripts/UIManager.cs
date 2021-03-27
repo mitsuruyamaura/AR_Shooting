@@ -14,6 +14,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private FieldAutoScroller autoScroller;
 
+    [SerializeField]
+    private Text txtStopMotionCount;
+
     void Start() {
         btnStopMotion.onClick.AddListener(OnClickStopMotion);    
     }
@@ -26,8 +29,19 @@ public class UIManager : MonoBehaviour
         txtDebugMessage.text = message;
     }
 
+    /// <summary>
+    /// 一時停止処理の実行
+    /// </summary>
     private void OnClickStopMotion() {
         autoScroller.StopAndPlayMotion();
+    }
+
+    /// <summary>
+    /// 一時停止できる残り回数の表示更新
+    /// </summary>
+    /// <param name="stopMotionCount"></param>
+    public void UpdateDisplayStopMotionCount(int stopMotionCount) {
+        txtStopMotionCount.text = stopMotionCount.ToString();
     }
 }
 

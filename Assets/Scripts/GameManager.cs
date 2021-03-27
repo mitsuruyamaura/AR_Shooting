@@ -51,4 +51,30 @@ public class GameManager : MonoBehaviour {
         GameObject enemy = Instantiate(enemyEventData.eventPrefab, enemyEventTran);
         gimmicksList.Add(enemy);
     }
+
+    /// <summary>
+    /// ‚·‚×‚Ä‚Ì“G‚ÌˆÚ“®‚ğˆê’â~
+    /// </summary>
+    public void StopMoveAllEnemies() {
+        if (enemiesList.Count <= 0) {
+            return;
+        }
+
+        for (int i = 0; i < enemiesList.Count; i++) {
+            enemiesList[i].GetComponent<AnimalController>().StopMoveAnimal();
+        }
+    }
+
+    /// <summary>
+    /// ‚·‚×‚Ä‚Ì“G‚ÌˆÚ“®‚ğÄŠJ
+    /// </summary>
+    public void ResumeMoveAllEnemies() {
+        if (enemiesList.Count <= 0) {
+            return;
+        }
+
+        for (int i = 0; i < enemiesList.Count; i++) {
+            enemiesList[i].GetComponent<AnimalController>().ResumeMoveAnimal();
+        }
+    }
 }
