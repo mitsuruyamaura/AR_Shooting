@@ -27,7 +27,9 @@ public class FieldAutoScroller : MonoBehaviour
 
     [SerializeField]
     private GameManager gameManager;
- 
+
+    public Vector3 targetPos;
+    public int currentTargetPathCount;
 
     IEnumerator Start() {
         yield return null;
@@ -39,9 +41,33 @@ public class FieldAutoScroller : MonoBehaviour
         tween = transform.DOPath(paths, totalTime).SetEase(Ease.Linear);
 
         uiManager.UpdateDisplayStopMotionCount(stopMotionCount);
+
+        currentTargetPathCount = 1;
+        targetPos = pathDatasList[currentTargetPathCount].pathTran.position;
+
+        //transform.LookAt(pathDatasList[0].pathTran);
+
+        //StartCoroutine(CheckPath());
+    }
+
+    private IEnumerator CheckPath() {
+        for (int i = 0; i < pathDatasList.Count; i++) {
+            targetPos = pathDatasList[i].pathTran.position;
+            yield return new WaitUntil(() => transform.position == targetPos);            
+        }
     }
 
     private void Update() {
+        //if (targetPos.z <= transform.position.z && currentTargetPathCount < pathDatasList.Count - 1) {
+        //    currentTargetPathCount++;
+        //    targetPos = pathDatasList[currentTargetPathCount].pathTran.position;
+        //}
+
+        Vector3 direction = transform.position - pathDatasList[0].pathTran.position;
+        direction.y = 0;
+
+        Quaternion lookRotation = Quaternion.LookRotation(direction, Vector3.up);
+        transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, 0.1f);
 
         // ˆêŽž’âŽ~‚ÆÄŠJˆ—
         if (Input.GetKeyDown(KeyCode.Space)) {
