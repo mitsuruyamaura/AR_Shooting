@@ -19,27 +19,35 @@ public class FieldAutoScroller : MonoBehaviour
 
     bool isPause;
 
+    [SerializeField, Tooltip("ˆêŽž’âŽ~‰Â”\‰ñ”")]
+    private int stopMotionCount;
+
+
     IEnumerator Start() {
+        yield return null;
 
         Vector3[] paths = pathDatasList.Select(x => x.pathTran.position).ToArray();
         float totalTime = pathDatasList.Select(x => x.scrollTime).Sum();
 
         Debug.Log(totalTime);
-        tween = transform.DOPath(paths, totalTime);
-
-        yield return null;
+        tween = transform.DOPath(paths, totalTime).SetEase(Ease.Linear); 
     }
 
     private void Update() {
 
         // ˆêŽž’âŽ~‚ÆÄŠJˆ—
         if (Input.GetKeyDown(KeyCode.Space)) {
-            if (isPause) {
-                transform.DOPlay();
-            } else {
-                transform.DOPause();
-            }
-            isPause = !isPause;
+            StopAndPlayMotion();
         }
+    }
+
+    public void StopAndPlayMotion() {
+        if (isPause) {
+            transform.DOPlay();
+        } else if (!isPause && stopMotionCount > 0) {
+            transform.DOPause();
+            stopMotionCount--;
+        }
+        isPause = !isPause;
     }
 }
