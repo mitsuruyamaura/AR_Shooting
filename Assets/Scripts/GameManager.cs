@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     private List<GameObject> gimmicksList = new List<GameObject>();
 
+    [SerializeField]
+    private GameObject player;
 
     IEnumerator Start() {
         yield return StartCoroutine(PreparateGame());
@@ -36,6 +38,7 @@ public class GameManager : MonoBehaviour {
     /// <param name="enemyEventTran"></param>
     public void GenerateEnemy(EventDataSO.EventData enemyEventData, Transform enemyEventTran) {
         GameObject enemy = Instantiate(enemyEventData.eventPrefab, enemyEventTran);
+        enemy.GetComponent<AnimalController>().SetUpAnimalController(player);
         enemiesList.Add(enemy);
     }
 

@@ -37,13 +37,17 @@ public class FieldAutoScroller : MonoBehaviour
 
         // ˆêŽž’âŽ~‚ÆÄŠJˆ—
         if (Input.GetKeyDown(KeyCode.Space)) {
-            if (isPause) {
-                transform.DOPlay();
-            } else if (!isPause && stopMotionCount > 0) {
-                transform.DOPause();
-                stopMotionCount--;
-            }
-            isPause = !isPause;
+            StopAndPlayMotion();
         }
+    }
+
+    public void StopAndPlayMotion() {
+        if (isPause) {
+            transform.DOPlay();
+        } else if (!isPause && stopMotionCount > 0) {
+            transform.DOPause();
+            stopMotionCount--;
+        }
+        isPause = !isPause;
     }
 }
