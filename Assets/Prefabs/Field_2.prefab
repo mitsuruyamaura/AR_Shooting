@@ -3332,10 +3332,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pathDatasList:
-  - scrollTime: 10
+  - scrollTime: 5
     pathTran: {fileID: 0}
-  - scrollTime: 10
+  - scrollTime: 5
     pathTran: {fileID: 0}
+  stopMotionCount: 3
+  uiManager: {fileID: 0}
+  gameManager: {fileID: 0}
+  targetPos: {x: 0, y: 0, z: 0}
+  currentTargetPathCount: 0
 --- !u!1 &3816033173859080121
 GameObject:
   m_ObjectHideFlags: 0
@@ -20896,7 +20901,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3816033175013808731}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -500, y: -3, z: -500}
   m_LocalScale: {x: 2.8255877, y: 2.8255868, z: 2.8255868}
   m_Children: []
@@ -29469,7 +29474,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3816033175513625788}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -125, y: 0, z: -125}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []

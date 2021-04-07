@@ -37,6 +37,9 @@ public class FieldAutoScroller : MonoBehaviour
         Vector3[] paths = pathDatasList.Select(x => x.pathTran.position).ToArray();
         float totalTime = pathDatasList.Select(x => x.scrollTime).Sum();
 
+        paths[0].y = paths[0].y - 5;
+        paths[1].y = paths[1].y - 5;
+
         Debug.Log(totalTime);
         tween = transform.DOPath(paths, totalTime).SetEase(Ease.Linear);
 
@@ -63,11 +66,11 @@ public class FieldAutoScroller : MonoBehaviour
         //    targetPos = pathDatasList[currentTargetPathCount].pathTran.position;
         //}
 
-        Vector3 direction = transform.position - pathDatasList[0].pathTran.position;
-        direction.y = 0;
+        //Vector3 direction = transform.position - pathDatasList[0].pathTran.position;
+        //direction.y = 0;
 
-        Quaternion lookRotation = Quaternion.LookRotation(direction, Vector3.up);
-        transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, 0.1f);
+        //Quaternion lookRotation = Quaternion.LookRotation(direction, Vector3.up);
+        //transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, 0.1f);
 
         // àÍéûí‚é~Ç∆çƒäJèàóù
         if (Input.GetKeyDown(KeyCode.Space)) {

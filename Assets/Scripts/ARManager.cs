@@ -12,6 +12,9 @@ public class ARManager : MonoBehaviour
     [SerializeField]
     private UIManager uiManager;
 
+    [SerializeField]
+    private GameObject field;
+
     private PlaneDetection planeDetection;
     
     private GameObject obj;
@@ -83,7 +86,9 @@ public class ARManager : MonoBehaviour
 
             if (obj == null) {
                 uiManager.DisplayDebug("Raycast 成功");
-                obj = Instantiate(objPrefab, hitPose.position, hitPose.rotation);
+                //obj = Instantiate(objPrefab, hitPose.position, hitPose.rotation);
+
+                field.SetActive(true);
 
                 currentARState = ARState.Ready;
             } else {
