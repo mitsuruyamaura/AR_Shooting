@@ -23,6 +23,8 @@ public class ARManager : MonoBehaviour
 
     private List<ARRaycastHit> raycastHitList = new List<ARRaycastHit>();
 
+    private FieldAutoScroller fieldAutoScroller;
+
 
 
     public enum ARState {
@@ -44,6 +46,9 @@ public class ARManager : MonoBehaviour
         planeDetection = GetComponent<PlaneDetection>();
 
         //currentARState = ARState.Tracking;
+
+        fieldAutoScroller = GetComponentInChildren<FieldAutoScroller>();
+
     }
 
 
@@ -67,7 +72,7 @@ public class ARManager : MonoBehaviour
             // ゲーム開始の準備
             StartCoroutine(PraparateGameReady());
         } else if (currentARState == ARState.Play) {
-            uiManager.DisplayDebug(currentARState.ToString());
+            //uiManager.DisplayDebug(currentARState.ToString());
         }
     }
 
@@ -110,6 +115,10 @@ public class ARManager : MonoBehaviour
         yield return new WaitForSeconds(2.0f);
 
         currentARState = ARState.Play;
+
+        uiManager.DisplayDebug(currentARState.ToString());
+
+        StartCoroutine(fieldAutoScroller.StartFieldScroll());
 
         // 平面検知を非表示
         planeDetection.SetAllPlaneActivate(false);

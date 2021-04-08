@@ -279,6 +279,7 @@ GameObject:
   - component: {fileID: 322517387}
   - component: {fileID: 322517391}
   - component: {fileID: 322517392}
+  - component: {fileID: 322517393}
   m_Layer: 0
   m_Name: AR Session Origin
   m_TagString: Untagged
@@ -358,7 +359,7 @@ MonoBehaviour:
     type: 3}
   uiManager: {fileID: 510689136}
   field: {fileID: 351705451}
-  currentARState: 0
+  currentARState: 1
 --- !u!114 &322517392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -371,6 +372,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b4e861839814054bb85a55434b06b30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &322517393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322517386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb7a5f5966809cb448b4f240ffc57003, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pathDatasList:
+  - scrollTime: 20
+    pathTran: {fileID: 369998408}
+  stopMotionCount: 3
+  uiManager: {fileID: 510689136}
+  gameManager: {fileID: 640027474}
+  targetPos: {x: 0, y: 0, z: 0}
+  currentTargetPathCount: 0
 --- !u!1 &351705451 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3816033173853576183, guid: 88a210c838d0c514fa293d1e4d854015,
@@ -438,7 +459,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   txtDebugMessage: {fileID: 2110875510}
   btnStopMotion: {fileID: 1808005584}
-  autoScroller: {fileID: 1062907694}
+  autoScroller: {fileID: 0}
   txtStopMotionCount: {fileID: 1920494379}
 --- !u!4 &510689137
 Transform:
@@ -805,18 +826,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &1062907694 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3416244455845857279, guid: 88a210c838d0c514fa293d1e4d854015,
-    type: 3}
-  m_PrefabInstance: {fileID: 3416244457032987900}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 351705451}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb7a5f5966809cb448b4f240ffc57003, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1076962498
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1631,5 +1640,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3416244455845857279, guid: 88a210c838d0c514fa293d1e4d854015, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 88a210c838d0c514fa293d1e4d854015, type: 3}

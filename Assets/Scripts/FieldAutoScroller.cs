@@ -31,17 +31,19 @@ public class FieldAutoScroller : MonoBehaviour
     public Vector3 targetPos;
     public int currentTargetPathCount;
 
-    IEnumerator Start() {
+    public IEnumerator StartFieldScroll() {
         yield return null;
 
         Vector3[] paths = pathDatasList.Select(x => x.pathTran.position).ToArray();
         float totalTime = pathDatasList.Select(x => x.scrollTime).Sum();
 
-        paths[0].y = paths[0].y - 5;
-        paths[1].y = paths[1].y - 5;
+        //paths[0].y = paths[0].y - 5;
+        //paths[1].y = paths[1].y - 5;
 
         Debug.Log(totalTime);
         tween = transform.DOPath(paths, totalTime).SetEase(Ease.Linear);
+
+        uiManager.DisplayDebug("ˆÚ“®ŠJŽn");
 
         uiManager.UpdateDisplayStopMotionCount(stopMotionCount);
 
