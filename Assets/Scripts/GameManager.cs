@@ -22,19 +22,30 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     private FieldAutoScroller fieldAutoScroller;
 
+    [SerializeField]
+    private UIManager uiManager;
+
     [System.Serializable]
-    public class RootData {
-        public int rootNo;
-        public List<PathData> pathDatasList = new List<PathData>();
+    public class RootEventData {
+        public int[] rootEventNos;
+        public BranchDirectionType[] branchDirectionTypes;  // 分岐の方向
+        public RootType rootType;
     }
 
     [SerializeField]
-    private List<RootData> rootDatasList = new List<RootData>();
+    private List<RootEventData> rootDatasList = new List<RootEventData>();
+
+    private int currentRailCount;       // 現在の進行状況
 
 
     IEnumerator Start() {
+        // ゲームの準備
         yield return StartCoroutine(PreparateGame());
-        fieldAutoScroller.SetNextField(rootDatasList[0].pathDatasList);
+
+        // 次のルートの確認と設定
+        yield return StartCoroutine(CheckNextRootBranch());
+
+
     }
 
     /// <summary>
@@ -93,5 +104,62 @@ public class GameManager : MonoBehaviour {
         for (int i = 0; i < enemiesList.Count; i++) {
             enemiesList[i].GetComponent<AnimalController>().ResumeMoveAnimal();
         }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="checkRootNo"></param>
+    /// <returns></returns>
+    private List<PathData> GetPathDatasList(int checkRootNo) {
+        return pathDataSO.rootDatasList.Find(x => x.rootNo == checkRootNo).pathDatasList;
+    }
+
+    /// <summary>
+    /// ルートの確認
+    /// 分岐がある場合には分岐の矢印ボタンを生成
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator CheckNextRootBranch() {
+
+        if (currentRailCount >= rootDatasList.Count) {
+            // TODO クリア判定
+            Debug.Log("クリア");
+
+            yield break;
+        }
+
+        // 現在のレールカウントの RootType を確認して、次に発生するルートを決める
+        switch (rootDatasList[currentRailCount].rootType) {
+            case RootType.Normal_Battle:
+                // 次のルートが１つなら
+                if (rootDatasList[currentRailCount].rootEventNos.Length == 1) {
+                    // 自動的にレール移動を開始
+                    fieldAutoScroller.SetNextField(GetPathDatasList(rootDatasList[currentRailCount].rootEventNos[0]));
+                } else {
+                    // 分岐がある場合、分岐イベントを発生させて、画面上に矢印のボタンを表示
+                    yield return StartCoroutine(uiManager.GenerateBranchButtons(rootDatasList[currentRailCount].rootEventNos, rootDatasList[currentRailCount].branchDirectionTypes));
+
+                    // 矢印が押されるまで待機(while でもOK)
+                    yield return new WaitUntil(() => uiManager.GetSubmitBranch().Item1 == true);
+
+                    // 選択した分岐のルートを設定
+                    fieldAutoScroller.SetNextField(GetPathDatasList(uiManager.GetSubmitBranch().Item2));
+                }
+                
+                break;
+
+            case RootType.Boss_Battle:
+
+                break;
+
+            case RootType.Event:
+
+                break;
+        }
+
+        
+        // 次のためにアップ
+        currentRailCount++;
     }
 }

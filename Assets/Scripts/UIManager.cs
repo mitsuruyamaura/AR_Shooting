@@ -17,6 +17,28 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text txtStopMotionCount;
 
+    [SerializeField]
+    private SubmitBranchButton submitBranchButtonPrefab;
+
+    [SerializeField]
+    private List<SubmitBranchButton> submitBranchButtonsList = new List<SubmitBranchButton>();
+
+    [SerializeField]
+    private Transform rightBranchTran;
+
+    [SerializeField]
+    private Transform leftBranchTran;
+
+    [SerializeField]
+    private Transform centerBranchTran;
+
+    [SerializeField]
+    private bool isSubmitBranch;
+
+    [SerializeField]
+    private int submitBranchNo;
+
+
     void Start() {
         btnStopMotion.onClick.AddListener(OnClickStopMotion);    
     }
@@ -42,6 +64,54 @@ public class UIManager : MonoBehaviour
     /// <param name="stopMotionCount"></param>
     public void UpdateDisplayStopMotionCount(int stopMotionCount) {
         txtStopMotionCount.text = stopMotionCount.ToString();
+    }
+
+    /// <summary>
+    /// 分岐のボタン作成
+    /// </summary>
+    public IEnumerator GenerateBranchButtons(int[] branchNums, BranchDirectionType[] branchDirectionTypes) {
+
+        isSubmitBranch = false;
+
+        // 分岐の数だけボタンを生成
+        for (int i = 0; i < branchNums.Length; i++) {
+
+            // ボタンの生成位置を設定
+            Transform branchTran = BranchDirectionType.Right == branchDirectionTypes[i] ? rightBranchTran : BranchDirectionType.Left == branchDirectionTypes[i] ? leftBranchTran : centerBranchTran;
+            
+            // ボタン生成
+            SubmitBranchButton submitBranchButton = Instantiate(submitBranchButtonPrefab, branchTran, false);
+
+            // ボタン設定
+            submitBranchButton.SetUpSubmitBranchButton(branchNums[i], this);
+
+            // List に追加
+            submitBranchButtonsList.Add(submitBranchButton);
+        }
+        yield return null;
+    }
+
+    /// <summary>
+    /// 分岐先の決定
+    /// </summary>
+    /// <param name="rootNo"></param>
+    public void SubmitBranch(int rootNo) {
+        for (int i = 0; i < submitBranchButtonsList.Count; i++) {
+            // 分岐のボタンを非活性化して重複タップを防止
+            submitBranchButtonsList[i].InactivateSubmitButton();
+        }
+        submitBranchButtonsList.Clear();
+
+        submitBranchNo = rootNo;
+        isSubmitBranch = true;
+    }
+
+    /// <summary>
+    /// 分岐情報の取得
+    /// </summary>
+    /// <returns></returns>
+    public (bool, int) GetSubmitBranch() {
+        return (isSubmitBranch, submitBranchNo);
     }
 }
 
