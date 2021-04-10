@@ -6,12 +6,6 @@ using System.Linq;
 
 public class FieldAutoScroller : MonoBehaviour
 {
-    [System.Serializable]
-    public class PathData {
-        public float scrollTime;
-        public Transform pathTran;
-    }
-
     [SerializeField]
     private List<PathData> pathDatasList = new List<PathData>();
 
@@ -35,7 +29,7 @@ public class FieldAutoScroller : MonoBehaviour
         yield return null;
 
         Vector3[] paths = pathDatasList.Select(x => x.pathTran.position).ToArray();
-        float totalTime = pathDatasList.Select(x => x.scrollTime).Sum();
+        float totalTime = pathDatasList.Select(x => x.scrollDuration).Sum();
 
         //paths[0].y = paths[0].y - 5;
         //paths[1].y = paths[1].y - 5;
@@ -95,5 +89,12 @@ public class FieldAutoScroller : MonoBehaviour
             uiManager.UpdateDisplayStopMotionCount(stopMotionCount);
         }
         isPause = !isPause;
+    }
+
+    /// <summary>
+    /// 次に再生するフィールドを設定
+    /// </summary>
+    public void SetNextField(List<PathData> nextPathDataList) {
+        pathDatasList = new List<PathData>(nextPathDataList);
     }
 }

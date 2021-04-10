@@ -16,8 +16,25 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     private GameObject player;
 
+    [SerializeField]
+    private PathDataSO pathDataSO;
+
+    [SerializeField]
+    private FieldAutoScroller fieldAutoScroller;
+
+    [System.Serializable]
+    public class RootData {
+        public int rootNo;
+        public List<PathData> pathDatasList = new List<PathData>();
+    }
+
+    [SerializeField]
+    private List<RootData> rootDatasList = new List<RootData>();
+
+
     IEnumerator Start() {
         yield return StartCoroutine(PreparateGame());
+        fieldAutoScroller.SetNextField(rootDatasList[0].pathDatasList);
     }
 
     /// <summary>
