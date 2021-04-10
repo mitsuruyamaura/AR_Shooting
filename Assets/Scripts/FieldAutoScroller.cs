@@ -6,12 +6,6 @@ using System.Linq;
 
 public class FieldAutoScroller : MonoBehaviour
 {
-    [System.Serializable]
-    public class PathData {
-        public float scrollTime;
-        public Transform pathTran;
-    }
-
     [SerializeField]
     private List<PathData> pathDatasList = new List<PathData>();
 
@@ -35,7 +29,7 @@ public class FieldAutoScroller : MonoBehaviour
         yield return null;
 
         Vector3[] paths = pathDatasList.Select(x => x.pathTran.position).ToArray();
-        float totalTime = pathDatasList.Select(x => x.scrollTime).Sum();
+        float totalTime = pathDatasList.Select(x => x.scrollDuration).Sum();
 
         //paths[0].y = paths[0].y - 5;
         //paths[1].y = paths[1].y - 5;
@@ -47,8 +41,10 @@ public class FieldAutoScroller : MonoBehaviour
 
         uiManager.UpdateDisplayStopMotionCount(stopMotionCount);
 
+        //
+        targetPos = pathDatasList[pathDatasList.Count - 1].pathTran.position;
+
         currentTargetPathCount = 1;
-        targetPos = pathDatasList[currentTargetPathCount].pathTran.position;
 
         //transform.LookAt(pathDatasList[0].pathTran);
 
@@ -78,6 +74,15 @@ public class FieldAutoScroller : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space)) {
             StopAndPlayMotion();
         }
+
+        // 移動完了の確認
+        if (transform.position == targetPos && currentTargetPathCount == 1) {   //  
+            currentTargetPathCount = 0;
+
+            StartCoroutine(gameManager.CheckNextRootBranch());
+
+            Debug.Log("分岐確認");
+        }
     }
 
     public void StopAndPlayMotion() {
@@ -95,5 +100,14 @@ public class FieldAutoScroller : MonoBehaviour
             uiManager.UpdateDisplayStopMotionCount(stopMotionCount);
         }
         isPause = !isPause;
+    }
+
+    /// <summary>
+    /// 次に再生するフィールドを設定
+    /// </summary>
+    public void SetNextField(List<PathData> nextPathDataList) {
+        pathDatasList = new List<PathData>(nextPathDataList);
+
+        StartCoroutine(StartFieldScroll());
     }
 }

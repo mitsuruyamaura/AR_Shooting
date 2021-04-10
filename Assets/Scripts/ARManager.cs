@@ -118,7 +118,9 @@ public class ARManager : MonoBehaviour
 
         uiManager.DisplayDebug(currentARState.ToString());
 
-        StartCoroutine(fieldAutoScroller.StartFieldScroll());
+        //StartCoroutine(fieldAutoScroller.StartFieldScroll());
+
+
 
         // 平面検知を非表示
         planeDetection.SetAllPlaneActivate(false);
