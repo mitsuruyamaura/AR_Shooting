@@ -41,8 +41,10 @@ public class FieldAutoScroller : MonoBehaviour
 
         uiManager.UpdateDisplayStopMotionCount(stopMotionCount);
 
+        //
+        targetPos = pathDatasList[pathDatasList.Count - 1].pathTran.position;
+
         currentTargetPathCount = 1;
-        targetPos = pathDatasList[currentTargetPathCount].pathTran.position;
 
         //transform.LookAt(pathDatasList[0].pathTran);
 
@@ -72,6 +74,15 @@ public class FieldAutoScroller : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space)) {
             StopAndPlayMotion();
         }
+
+        // 移動完了の確認
+        if (transform.position == targetPos && currentTargetPathCount == 1) {   //  
+            currentTargetPathCount = 0;
+
+            StartCoroutine(gameManager.CheckNextRootBranch());
+
+            Debug.Log("分岐確認");
+        }
     }
 
     public void StopAndPlayMotion() {
@@ -96,5 +107,7 @@ public class FieldAutoScroller : MonoBehaviour
     /// </summary>
     public void SetNextField(List<PathData> nextPathDataList) {
         pathDatasList = new List<PathData>(nextPathDataList);
+
+        StartCoroutine(StartFieldScroll());
     }
 }

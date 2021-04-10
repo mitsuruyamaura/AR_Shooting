@@ -384,9 +384,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb7a5f5966809cb448b4f240ffc57003, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pathDatasList:
-  - scrollDuration: 0
-    pathTran: {fileID: 369998408}
+  pathDatasList: []
   stopMotionCount: 3
   uiManager: {fileID: 510689136}
   gameManager: {fileID: 640027474}

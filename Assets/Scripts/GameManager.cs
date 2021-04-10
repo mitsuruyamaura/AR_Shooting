@@ -39,6 +39,8 @@ public class GameManager : MonoBehaviour {
 
 
     IEnumerator Start() {
+
+
         // ゲームの準備
         yield return StartCoroutine(PreparateGame());
 
@@ -136,6 +138,7 @@ public class GameManager : MonoBehaviour {
                 if (rootDatasList[currentRailCount].rootEventNos.Length == 1) {
                     // 自動的にレール移動を開始
                     fieldAutoScroller.SetNextField(GetPathDatasList(rootDatasList[currentRailCount].rootEventNos[0]));
+                    Debug.Log("分岐なしの移動開始");
                 } else {
                     // 分岐がある場合、分岐イベントを発生させて、画面上に矢印のボタンを表示
                     yield return StartCoroutine(uiManager.GenerateBranchButtons(rootDatasList[currentRailCount].rootEventNos, rootDatasList[currentRailCount].branchDirectionTypes));

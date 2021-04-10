@@ -99,6 +99,7 @@ public class UIManager : MonoBehaviour
         for (int i = 0; i < submitBranchButtonsList.Count; i++) {
             // 分岐のボタンを非活性化して重複タップを防止
             submitBranchButtonsList[i].InactivateSubmitButton();
+            Destroy(submitBranchButtonsList[i].gameObject);
         }
         submitBranchButtonsList.Clear();
 
