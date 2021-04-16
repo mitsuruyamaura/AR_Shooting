@@ -38,6 +38,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private int submitBranchNo;
 
+    [SerializeField]
+    private Text txtARIntroduction;
+
 
     void Start() {
         btnStopMotion.onClick.AddListener(OnClickStopMotion);    
@@ -113,6 +116,21 @@ public class UIManager : MonoBehaviour
     /// <returns></returns>
     public (bool, int) GetSubmitBranch() {
         return (isSubmitBranch, submitBranchNo);
+    }
+
+    /// <summary>
+    /// AR 導入部分のメッセージ表示
+    /// </summary>
+    public void DisplayARIntroduction(string message) {
+        txtARIntroduction.text = message;
+    }
+
+    /// <summary>
+    /// AR 導入用のメッセージ表示のオン/オフ切り替え
+    /// </summary>
+    /// <param name="isSwicth"></param>
+    public void InactiveARIntroductionText(bool isSwicth) {
+        txtARIntroduction.transform.root.root.gameObject.SetActive(isSwicth);
     }
 }
 
