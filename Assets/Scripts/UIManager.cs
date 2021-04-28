@@ -8,6 +8,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text txtDebugMessage;
 
+
+    //mi
+
     [SerializeField]
     private Button btnStopMotion;
 
@@ -42,10 +45,6 @@ public class UIManager : MonoBehaviour
     private Text txtARIntroduction;
 
 
-    void Start() {
-        btnStopMotion.onClick.AddListener(OnClickStopMotion);    
-    }
-
     /// <summary>
     /// デバッグ内容を画面表示
     /// </summary>
@@ -53,6 +52,15 @@ public class UIManager : MonoBehaviour
     public void DisplayDebug(string message) {
         txtDebugMessage.text = message;
     }
+
+
+    // mi
+
+
+    void Start() {
+        btnStopMotion.onClick.AddListener(OnClickStopMotion);    
+    }
+
 
     /// <summary>
     /// 一時停止処理の実行
@@ -75,6 +83,7 @@ public class UIManager : MonoBehaviour
     public IEnumerator GenerateBranchButtons(int[] branchNums, BranchDirectionType[] branchDirectionTypes) {
 
         isSubmitBranch = false;
+        Debug.Log("分岐のボタン作成");
 
         // 分岐の数だけボタンを生成
         for (int i = 0; i < branchNums.Length; i++) {
@@ -130,7 +139,7 @@ public class UIManager : MonoBehaviour
     /// </summary>
     /// <param name="isSwicth"></param>
     public void InactiveARIntroductionText(bool isSwicth) {
-        txtARIntroduction.transform.root.root.gameObject.SetActive(isSwicth);
+        txtARIntroduction.transform.parent.parent.gameObject.SetActive(isSwicth);
     }
 }
 

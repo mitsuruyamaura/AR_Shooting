@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
+using UniRx;
 
 public class ARManager : MonoBehaviour
 {
-    [SerializeField]
+    [SerializeField, HideInInspector]
     private GameObject objPrefab = null;
 
-    [SerializeField]
+    [SerializeField, HideInInspector]
     private UIManager uiManager;
 
     [SerializeField]
-    private GameObject field;
+    private GameObject fieldObj;
 
     private PlaneDetection planeDetection;
     
@@ -25,10 +26,8 @@ public class ARManager : MonoBehaviour
 
     private FieldAutoScroller fieldAutoScroller;
 
-
-
     public enum ARState {
-        None,
+        None,         // Editor でのデバッグ用
         Tracking,     // 平面感知中
         Wait,         // 待機。どこのステートにも属さない状態
         Ready,        // ゲーム準備中
@@ -39,6 +38,8 @@ public class ARManager : MonoBehaviour
 
     public ARState currentARState;
 
+    public ARStateReactiveProperty ARStateReactiveProperty;
+
 
     void Awake() {
         raycastManager = GetComponent<ARRaycastManager>();
@@ -48,7 +49,20 @@ public class ARManager : MonoBehaviour
         //currentARState = ARState.Tracking;
 
         fieldAutoScroller = GetComponentInChildren<FieldAutoScroller>();
+    }
 
+    IEnumerator Start() {
+        ARStateReactiveProperty = new ARStateReactiveProperty(global::ARState.Tracking);
+
+        // DistinctUntilChanged = 値が変化したときだけ通す
+        // Where = 条件式を満たすものだけ通す
+        // Subscribe = メッセージの受け取り時に実行するメソッドを登録する(Subject に実行して欲しいメソッドを登録する処理)
+        ARStateReactiveProperty.DistinctUntilChanged().Where(x => x == global::ARState.Ready).Subscribe(_ => StartCoroutine(PraparateGameReady()));
+
+        yield return new WaitForSeconds(2.0f);
+
+        // Debug 用
+        //ARStateReactiveProperty.Value = global::ARState.Ready;
     }
 
 
@@ -65,7 +79,7 @@ public class ARManager : MonoBehaviour
         if (currentARState == ARState.Tracking) {
             // 平面感知
             TrackingPlane();
-        } else if (currentARState == ARState.Ready) {
+        } else if (currentARState == ARState.Ready) {　　　　　　　　　　　　　// UniRX の場合、ここの else if から不要になる
             currentARState = ARState.Wait;
             uiManager.DisplayDebug(currentARState.ToString());
 
@@ -93,9 +107,13 @@ public class ARManager : MonoBehaviour
                 uiManager.DisplayDebug("Raycast 成功");
                 //obj = Instantiate(objPrefab, hitPose.position, hitPose.rotation);
 
-                field.SetActive(true);
+                fieldObj.SetActive(true);
 
                 currentARState = ARState.Ready;
+
+                // UniRX の場合
+                ARStateReactiveProperty.Value = global::ARState.Ready;
+
             } else {
                 uiManager.DisplayDebug("Raycast 済");
                 obj.transform.position = hitPose.position;
