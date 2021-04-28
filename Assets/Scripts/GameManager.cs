@@ -38,8 +38,7 @@ public class GameManager : MonoBehaviour {
     private int currentRailCount;       // Œ»İ‚Ìisó‹µ
 
 
-    IEnumerator Start() {
-
+    IEnumerator Start() { 
 
         // ƒQ[ƒ€‚Ì€”õ
         yield return StartCoroutine(PreparateGame());
