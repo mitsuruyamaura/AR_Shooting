@@ -5,7 +5,7 @@ using UnityEngine;
 public class TargetGenerator : MonoBehaviour
 {
     [SerializeField]
-    private AnimalController animalPrefab;
+    private EnemyController animalPrefab;
 
     [SerializeField]
     private Transform animalTran;
@@ -20,7 +20,7 @@ public class TargetGenerator : MonoBehaviour
     /// <returns></returns>
     public IEnumerator GenerateAnimals() {
         while (true) {
-            Instantiate(animalPrefab, animalTran).MoveAnimal();
+            Instantiate(animalPrefab, animalTran).MoveEnemy();
             yield return new WaitForSeconds(3.0f);
         }
     }
