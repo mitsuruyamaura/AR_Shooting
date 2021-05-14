@@ -15,8 +15,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - AttackRange
+  - Enemy
   - Lighting
   - Ground
   - Postprocessing

@@ -92,11 +92,11 @@ public class RayController : MonoBehaviour
 
     private void Shoot() {
         Ray ray = new Ray(transform.position, transform.forward);
-        Debug.DrawRay(ray.origin, ray.direction, Color.blue, 1.0f);
+        Debug.DrawRay(ray.origin, ray.direction, Color.blue, 3.0f);
 
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, shootRange)) {
+        if (Physics.Raycast(ray, out hit, shootRange, LayerMask.GetMask("Enemy"))) {
 
             // 同じ対象を攻撃しているか確認。対象がいなかったか、同じ対象でない場合
             if (target == null || target != hit.collider.gameObject) {

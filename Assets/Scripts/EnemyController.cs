@@ -14,7 +14,19 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     private int hp;
 
+    [SerializeField]
+    private int attackPower;
+
+    [SerializeField]
+    private CapsuleCollider capsuleCollider;
+
     private NavMeshAgent agent;
+
+    private bool isAttack;
+
+    private float attackInterval = 3.0f;
+
+    private PlayerController player;
 
     public void MoveEnemy() {
         //anim = GetComponent<Animator>();
@@ -93,6 +105,36 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay(Collider other) {
+        if (isAttack) {
+            return;
+        }
+
+        if (player != null) {
+            StartCoroutine(Attack(player));
+        } else {
+            if (other.gameObject.TryGetComponent(out player)) {
+                StartCoroutine(Attack(player));
+            }
+        }
+    }
+
+    /// <summary>
+    /// çUåÇ
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator Attack(PlayerController player) {
+        isAttack = true;
+
+        player.CalcDamage(attackPower);
+
+        anim.SetTrigger("Attack");
+
+        yield return new WaitForSeconds(attackInterval);
+
+        isAttack = false;
+    }
+
     /// <summary>
     /// É_ÉÅÅ[ÉWåvéZ
     /// </summary>
@@ -104,7 +146,7 @@ public class EnemyController : MonoBehaviour
 
             anim.SetBool("Down", true);
 
-            Destroy(gameObject, 2.5f);
+            Destroy(gameObject, 1.5f);
         }
     }
 }
