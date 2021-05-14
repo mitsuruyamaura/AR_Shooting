@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class AnimalController : MonoBehaviour
+public class EnemyController : MonoBehaviour
 {
     private Animator anim;
     private Tween tween;
 
     private GameObject lookTarget;
 
-    public void MoveAnimal() {
+    [SerializeField]
+    private int hp;
+
+    public void MoveEnemy() {
         //anim = GetComponent<Animator>();
         //anim.SetTrigger("jump");
         //tween = transform.DOMoveY(2.5f, 3.0f).SetEase(Ease.InBack)
@@ -29,21 +32,25 @@ public class AnimalController : MonoBehaviour
     /// <summary>
     /// 移動を一時停止
     /// </summary>
-    public void StopMoveAnimal() {
+    public void PauseMove() {
         tween.Pause();
     }
 
     /// <summary>
     /// 移動を再開
     /// </summary>
-    public void ResumeMoveAnimal() {
+    public void ResumeMove() {
         tween.Play();
     }
 
-    public void SetUpAnimalController(GameObject player) {
+    /// <summary>
+    /// 敵の設定
+    /// </summary>
+    /// <param name="player"></param>
+    public void SetUpEnemyController(GameObject player) {
         lookTarget = player;
 
-        MoveAnimal();
+        MoveEnemy();
     }
 
     void Update() {
@@ -68,6 +75,18 @@ public class AnimalController : MonoBehaviour
             Destroy(other.gameObject);
 
             Destroy(gameObject, 1.0f);
+        }
+    }
+
+    /// <summary>
+    /// ダメージ計算
+    /// </summary>
+    /// <param name="damage"></param>
+    public void CalcDamage(int damage) {
+        hp -= damage;
+
+        if (hp <= 0) {
+            Destroy(gameObject);
         }
     }
 }
