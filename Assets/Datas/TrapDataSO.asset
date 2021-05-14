@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d99e114432b7af0428c80eac7994e982, type: 3}
   m_Name: TrapDataSO
   m_EditorClassIdentifier: 
-  eventType: 2
+  eventType: 3
   eventDatasList: []

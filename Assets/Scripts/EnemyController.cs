@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.AI;
+using System;
 
-public class EnemyController : MonoBehaviour
+public class EnemyController : EventBase<int>
 {
     private Animator anim;
     private Tween tween;
@@ -126,7 +127,7 @@ public class EnemyController : MonoBehaviour
     private IEnumerator Attack(PlayerController player) {
         isAttack = true;
 
-        player.CalcDamage(attackPower);
+        player.CalcHp(-attackPower);
 
         anim.SetTrigger("Attack");
 
@@ -148,5 +149,9 @@ public class EnemyController : MonoBehaviour
 
             Destroy(gameObject, 1.5f);
         }
+    }
+
+    public override void TriggerEvent(int value) {
+        CalcDamage(value);
     }
 }

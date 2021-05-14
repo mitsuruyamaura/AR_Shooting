@@ -37,8 +37,13 @@ public class GameManager : MonoBehaviour {
 
     private int currentRailCount;       // Œ»İ‚Ìisó‹µ
 
+    [SerializeField]
+    private PlayerController playerController;
 
-    IEnumerator Start() { 
+
+    IEnumerator Start() {
+
+        playerController.SetUpPlayer();
 
         // ƒQ[ƒ€‚Ì€”õ
         yield return StartCoroutine(PreparateGame());
@@ -79,6 +84,16 @@ public class GameManager : MonoBehaviour {
     public void GenerateGimmick(EventDataSO.EventData enemyEventData, Transform enemyEventTran) {
         GameObject enemy = Instantiate(enemyEventData.eventPrefab, enemyEventTran);
         gimmicksList.Add(enemy);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="eventData"></param>
+    /// <param name="eventTran"></param>
+    public void GenerateItem(EventDataSO.EventData eventData, Transform eventTran) {
+        GameObject item = Instantiate(eventData.eventPrefab, eventTran);
+        item.GetComponent<ItemController>().SetUpItem(playerController);
     }
 
     /// <summary>

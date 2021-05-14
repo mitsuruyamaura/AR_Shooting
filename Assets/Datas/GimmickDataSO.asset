@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d99e114432b7af0428c80eac7994e982, type: 3}
   m_Name: GimmickDataSO
   m_EditorClassIdentifier: 
-  eventType: 1
+  eventType: 2
   eventDatasList:
   - eventNo: 0
     eventPrefab: {fileID: 7046184766197172480, guid: e22f0f867b3086a4e88ef66a8bfc7159,
