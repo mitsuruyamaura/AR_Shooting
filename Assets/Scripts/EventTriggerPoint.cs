@@ -46,6 +46,10 @@ public class EventTriggerPoint : MonoBehaviour {
                     case EventType.Gimmick:
                         gameManager.GenerateGimmick(eventDatas[i], eventTrans[i]);
                         continue;
+
+                    case EventType.Item:
+                        gameManager.GenerateItem(eventDatas[i], eventTrans[i]);
+                        break;
                 }
             }
         }

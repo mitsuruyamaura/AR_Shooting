@@ -4,14 +4,6 @@ using UnityEngine;
 
 public class RayController : MonoBehaviour
 {
-    public int maxBullet;
-
-    public int bulletPower;
-
-    public float shootInterval;
-
-    public float shootRange;
-
     public Vector3 muzzleFlashScale;
 
     public GameObject muzzleFlashPrefab;
@@ -20,38 +12,36 @@ public class RayController : MonoBehaviour
 
     private bool isShooting;
 
-    private int bulletCount;
-
     private GameObject muzzleFlashObj;
     private GameObject hitEffectObj;
 
     private GameObject target;
     private EnemyController enemy;
-    
-    public int BulletCount
-    {
-        set {
-            bulletCount = Mathf.Clamp(value, 0, maxBullet);
-        }
 
-        get {
-            return bulletCount;
-        }
-    }
+    [SerializeField]
+    private int[] layerMasks;
+
+    [SerializeField]
+    private string[] layerMasksStr;
+
+    private EventBase<int> eventBase;
+
+    [SerializeField]
+    private PlayerController playerController;
+
 
     void Start()
     {
-        InitializeBulletCount();
-    }
-
-    private void InitializeBulletCount() {
-        BulletCount = maxBullet;
+        layerMasksStr = new string[layerMasks.Length];
+        for (int i = 0; i < layerMasks.Length; i++) {
+            layerMasksStr[i] = LayerMask.LayerToName(layerMasks[i]);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (BulletCount > 0 && Input.GetMouseButton(0)) {
+        if (playerController.BulletCount > 0 && Input.GetMouseButton(0)) {
 
             // 発射時間の計測
             StartCoroutine(ShootTimer());
@@ -73,7 +63,7 @@ public class RayController : MonoBehaviour
 
             Shoot();
 
-            yield return new WaitForSeconds(shootInterval);
+            yield return new WaitForSeconds(playerController.shootInterval);
 
             muzzleFlashObj.SetActive(false);
 
@@ -96,7 +86,9 @@ public class RayController : MonoBehaviour
 
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, shootRange, LayerMask.GetMask("Enemy"))) {
+        if (Physics.Raycast(ray, out hit, playerController.shootRange, LayerMask.GetMask(layerMasksStr))) {
+
+            Debug.Log(hit.collider.gameObject.name);
 
             // 同じ対象を攻撃しているか確認。対象がいなかったか、同じ対象でない場合
             if (target == null || target != hit.collider.gameObject) {
@@ -104,25 +96,39 @@ public class RayController : MonoBehaviour
                 // クラスを継承して使うようにして、TryGetComponent の処理を Base を取得して統一する
                 target = hit.collider.gameObject;
 
-                // ダメージ処理
-                if (target.TryGetComponent(out enemy)) {
-                    enemy.CalcDamage(bulletPower);
+                if (target.TryGetComponent(out eventBase)) {
+                    eventBase.TriggerEvent(playerController.bulletPower);
 
                     // 演出
                     PlayHitEffect(hit.point, hit.normal);
                 }
-            //　同じ対象の場合
+
+                //// ダメージ処理
+                //if (target.TryGetComponent(out enemy)) {
+                //    enemy.CalcDamage(playerController.bulletPower);
+
+                //    // 演出
+                //    PlayHitEffect(hit.point, hit.normal);
+                //}
+                //　同じ対象の場合
             } else {
-                if (target.TryGetComponent(out enemy)) {
-                    enemy.CalcDamage(bulletPower);
+                if (target.TryGetComponent(out eventBase)) {
+                    eventBase.TriggerEvent(playerController.bulletPower);
 
                     // 演出
                     PlayHitEffect(hit.point, hit.normal);
+
                 }
+                //if (target.TryGetComponent(out enemy)) {
+                //    enemy.CalcDamage(playerController.bulletPower);
+
+                //    // 演出
+                //    PlayHitEffect(hit.point, hit.normal);
+                //}
             }
         }
 
-        BulletCount--;
+        playerController.BulletCount--;
     }
 
     /// <summary>
