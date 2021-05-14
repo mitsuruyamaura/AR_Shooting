@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
@@ -12,6 +13,20 @@ public class EnemyController : MonoBehaviour
 
     [SerializeField]
     private int hp;
+
+    [SerializeField]
+    private int attackPower;
+
+    [SerializeField]
+    private CapsuleCollider capsuleCollider;
+
+    private NavMeshAgent agent;
+
+    private bool isAttack;
+
+    private float attackInterval = 3.0f;
+
+    private PlayerController player;
 
     public void MoveEnemy() {
         //anim = GetComponent<Animator>();
@@ -47,11 +62,19 @@ public class EnemyController : MonoBehaviour
     /// ìGÇÃê›íË
     /// </summary>
     /// <param name="player"></param>
-    public void SetUpEnemyController(GameObject player) {
+    public IEnumerator SetUpEnemyController(GameObject player) {
         lookTarget = player;
 
-        MoveEnemy();
+        TryGetComponent(out agent);
+        TryGetComponent(out anim);
+
+        agent.destination = lookTarget.transform.position;
+
+        yield return null;
+
+        //MoveEnemy();
     }
+
 
     void Update() {
 
@@ -62,7 +85,11 @@ public class EnemyController : MonoBehaviour
 
             Quaternion lookRotation = Quaternion.LookRotation(direction, Vector3.up);
             transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, 0.1f);
-        }    
+        }
+
+        if (lookTarget != null) {
+            agent.destination = lookTarget.transform.position;
+        }
     }
 
     private void OnTriggerEnter(Collider other) {
@@ -78,6 +105,36 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay(Collider other) {
+        if (isAttack) {
+            return;
+        }
+
+        if (player != null) {
+            StartCoroutine(Attack(player));
+        } else {
+            if (other.gameObject.TryGetComponent(out player)) {
+                StartCoroutine(Attack(player));
+            }
+        }
+    }
+
+    /// <summary>
+    /// çUåÇ
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator Attack(PlayerController player) {
+        isAttack = true;
+
+        player.CalcDamage(attackPower);
+
+        anim.SetTrigger("Attack");
+
+        yield return new WaitForSeconds(attackInterval);
+
+        isAttack = false;
+    }
+
     /// <summary>
     /// É_ÉÅÅ[ÉWåvéZ
     /// </summary>
@@ -86,7 +143,10 @@ public class EnemyController : MonoBehaviour
         hp -= damage;
 
         if (hp <= 0) {
-            Destroy(gameObject);
+
+            anim.SetBool("Down", true);
+
+            Destroy(gameObject, 1.5f);
         }
     }
 }

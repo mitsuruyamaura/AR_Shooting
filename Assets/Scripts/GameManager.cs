@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour {
         yield return StartCoroutine(PreparateGame());
 
         // 次のルートの確認と設定
-        //yield return StartCoroutine(CheckNextRootBranch());
+        yield return StartCoroutine(CheckNextRootBranch());
 
 
     }
@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour {
     /// <param name="enemyEventTran"></param>
     public void GenerateEnemy(EventDataSO.EventData enemyEventData, Transform enemyEventTran) {
         GameObject enemy = Instantiate(enemyEventData.eventPrefab, enemyEventTran);
-        enemy.GetComponent<EnemyController>().SetUpEnemyController(player);
+        StartCoroutine(enemy.GetComponent<EnemyController>().SetUpEnemyController(player));
         enemiesList.Add(enemy);
     }
 

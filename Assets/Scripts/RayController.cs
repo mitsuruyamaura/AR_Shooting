@@ -77,7 +77,9 @@ public class RayController : MonoBehaviour
 
             muzzleFlashObj.SetActive(false);
 
-            hitEffectObj.SetActive(false);
+            if (hitEffectObj != null) {
+                hitEffectObj.SetActive(false);
+            }
 
             isShooting = false;
 
@@ -90,11 +92,11 @@ public class RayController : MonoBehaviour
 
     private void Shoot() {
         Ray ray = new Ray(transform.position, transform.forward);
-        Debug.DrawRay(ray.origin, ray.direction, Color.blue, 1.0f);
+        Debug.DrawRay(ray.origin, ray.direction, Color.blue, 3.0f);
 
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, shootRange)) {
+        if (Physics.Raycast(ray, out hit, shootRange, LayerMask.GetMask("Enemy"))) {
 
             // 同じ対象を攻撃しているか確認。対象がいなかったか、同じ対象でない場合
             if (target == null || target != hit.collider.gameObject) {
@@ -111,10 +113,12 @@ public class RayController : MonoBehaviour
                 }
             //　同じ対象の場合
             } else {
-                enemy.CalcDamage(bulletPower);
+                if (target.TryGetComponent(out enemy)) {
+                    enemy.CalcDamage(bulletPower);
 
-                // 演出
-                PlayHitEffect(hit.point, hit.normal);
+                    // 演出
+                    PlayHitEffect(hit.point, hit.normal);
+                }
             }
         }
 
