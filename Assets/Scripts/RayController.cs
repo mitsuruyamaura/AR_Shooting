@@ -77,7 +77,9 @@ public class RayController : MonoBehaviour
 
             muzzleFlashObj.SetActive(false);
 
-            hitEffectObj.SetActive(false);
+            if (hitEffectObj != null) {
+                hitEffectObj.SetActive(false);
+            }
 
             isShooting = false;
 
@@ -111,10 +113,12 @@ public class RayController : MonoBehaviour
                 }
             //Å@ìØÇ∂ëŒè€ÇÃèÍçá
             } else {
-                enemy.CalcDamage(bulletPower);
+                if (target.TryGetComponent(out enemy)) {
+                    enemy.CalcDamage(bulletPower);
 
-                // ââèo
-                PlayHitEffect(hit.point, hit.normal);
+                    // ââèo
+                    PlayHitEffect(hit.point, hit.normal);
+                }
             }
         }
 

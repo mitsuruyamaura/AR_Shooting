@@ -3,6 +3,7 @@
 /// </summary>
 public enum EventType { 
     Enemy,
+    Boss,
     Gimmick,
     Trap,
     Treasure,

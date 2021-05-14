@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class EnemyController : MonoBehaviour
 
     [SerializeField]
     private int hp;
+
+    private NavMeshAgent agent;
 
     public void MoveEnemy() {
         //anim = GetComponent<Animator>();
@@ -47,11 +50,19 @@ public class EnemyController : MonoBehaviour
     /// ìGÇÃê›íË
     /// </summary>
     /// <param name="player"></param>
-    public void SetUpEnemyController(GameObject player) {
+    public IEnumerator SetUpEnemyController(GameObject player) {
         lookTarget = player;
 
-        MoveEnemy();
+        TryGetComponent(out agent);
+        TryGetComponent(out anim);
+
+        agent.destination = lookTarget.transform.position;
+
+        yield return null;
+
+        //MoveEnemy();
     }
+
 
     void Update() {
 
@@ -62,7 +73,11 @@ public class EnemyController : MonoBehaviour
 
             Quaternion lookRotation = Quaternion.LookRotation(direction, Vector3.up);
             transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, 0.1f);
-        }    
+        }
+
+        if (lookTarget != null) {
+            agent.destination = lookTarget.transform.position;
+        }
     }
 
     private void OnTriggerEnter(Collider other) {
@@ -86,7 +101,10 @@ public class EnemyController : MonoBehaviour
         hp -= damage;
 
         if (hp <= 0) {
-            Destroy(gameObject);
+
+            anim.SetBool("Down", true);
+
+            Destroy(gameObject, 2.5f);
         }
     }
 }
