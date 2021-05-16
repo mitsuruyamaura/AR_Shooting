@@ -85,6 +85,9 @@ public class FieldAutoScroller : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// フィールドの移動と一時停止
+    /// </summary>
     public void StopAndPlayMotion() {
         if (isPause) {
             transform.DOPlay();

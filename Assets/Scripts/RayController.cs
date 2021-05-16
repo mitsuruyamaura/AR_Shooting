@@ -21,13 +21,16 @@ public class RayController : MonoBehaviour
     [SerializeField]
     private int[] layerMasks;
 
-    [SerializeField]
+    //[SerializeField]  Debug—p
     private string[] layerMasksStr;
 
     private EventBase<int> eventBase;
 
     [SerializeField]
     private PlayerController playerController;
+
+    [SerializeField]
+    private ARManager arManager;
 
 
     void Start()
@@ -41,6 +44,10 @@ public class RayController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (arManager.ARStateReactiveProperty.Value != ARState.Play) {
+            return;
+        }
+
         if (playerController.BulletCount > 0 && Input.GetMouseButton(0)) {
 
             // ”­ŽËŽžŠÔ‚ÌŒv‘ª

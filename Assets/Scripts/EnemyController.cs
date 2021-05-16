@@ -29,6 +29,8 @@ public class EnemyController : EventBase<int>
 
     private PlayerController player;
 
+    private GameManager gameManager;
+
     public void MoveEnemy() {
         //anim = GetComponent<Animator>();
         //anim.SetTrigger("jump");
@@ -62,9 +64,12 @@ public class EnemyController : EventBase<int>
     /// <summary>
     /// ìGÇÃê›íË
     /// </summary>
-    /// <param name="player"></param>
-    public IEnumerator SetUpEnemyController(GameObject player) {
-        lookTarget = player;
+    /// <param name="playerObj"></param>
+    /// <param name="gameManager"></param>
+    /// <returns></returns>
+    public IEnumerator SetUpEnemyController(GameObject playerObj, GameManager gameManager) {
+        lookTarget = playerObj;
+        this.gameManager = gameManager;
 
         TryGetComponent(out agent);
         TryGetComponent(out anim);
@@ -146,6 +151,8 @@ public class EnemyController : EventBase<int>
         if (hp <= 0) {
 
             anim.SetBool("Down", true);
+
+            gameManager.RemoveEnemyList(this);
 
             Destroy(gameObject, 1.5f);
         }
