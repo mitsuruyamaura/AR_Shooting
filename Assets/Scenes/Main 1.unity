@@ -2343,7 +2343,7 @@ GameObject:
   - component: {fileID: 2052087150}
   - component: {fileID: 2052087149}
   m_Layer: 5
-  m_Name: imgLife
+  m_Name: imgLifeBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

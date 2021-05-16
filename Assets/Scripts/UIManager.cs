@@ -57,6 +57,7 @@ public class UIManager : MonoBehaviour
     private List<GameObject> lifesList = new List<GameObject>();
 
     private int maxLifeIcon;
+    private int maxBulletCount;
 
     /// <summary>
     /// デバッグ内容を画面表示
@@ -195,8 +196,9 @@ public class UIManager : MonoBehaviour
     /// ライフ用アイコンの最大値を設定
     /// </summary>
     /// <param name="maxHp"></param>
-    public void SetMaxLife(int maxHp) {
+    public void SetMaxLife(int maxHp, int maxBulletCount) {
         maxLifeIcon = maxHp;
+        this.maxBulletCount = maxBulletCount;
     }
 }
 
