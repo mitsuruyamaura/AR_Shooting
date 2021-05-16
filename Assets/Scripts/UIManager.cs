@@ -47,6 +47,17 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject targetIcon;
 
+    [SerializeField]
+    private Transform lifeTran;
+
+    [SerializeField]
+    private GameObject lifePrefab;
+
+    [SerializeField]
+    private List<GameObject> lifesList = new List<GameObject>();
+
+    private int maxLifeIcon;
+
     /// <summary>
     /// デバッグ内容を画面表示
     /// </summary>
@@ -145,6 +156,47 @@ public class UIManager : MonoBehaviour
     /// <param name="isSwicth"></param>
     public void InactiveARIntroductionText(bool isSwicth) {
         txtARIntroduction.transform.parent.parent.gameObject.SetActive(isSwicth);
+    }
+
+
+    /// <summary>
+    /// ライフ用のアイコン(パーティクル)を生成
+    /// </summary>
+    public IEnumerator GenerateLife(int amount) {
+        
+        for (int i = 0; i < amount; i++) {
+            lifesList.Add(Instantiate(lifePrefab, lifeTran, false));
+            yield return new WaitForSeconds(0.25f);
+
+            if (lifesList.Count == maxLifeIcon) {
+                break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// ライフの再表示
+    /// </summary>
+    /// <param name="amout"></param>
+    public void ReLife(int amout) {
+
+        for (int i = 0; i < maxLifeIcon; i++) {
+
+            if (i < amout) {
+                lifesList[i].SetActive(true);
+            } else {
+                lifesList[i].SetActive(false);
+            }
+
+        }
+    }
+
+    /// <summary>
+    /// ライフ用アイコンの最大値を設定
+    /// </summary>
+    /// <param name="maxHp"></param>
+    public void SetMaxLife(int maxHp) {
+        maxLifeIcon = maxHp;
     }
 }
 

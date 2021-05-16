@@ -31,6 +31,8 @@ public class EnemyController : EventBase<int>
 
     private GameManager gameManager;
 
+    private IEnumerator attackCoroutine;
+
     public void MoveEnemy() {
         //anim = GetComponent<Animator>();
         //anim.SetTrigger("jump");
@@ -117,11 +119,20 @@ public class EnemyController : EventBase<int>
         }
 
         if (player != null) {
-            StartCoroutine(Attack(player));
+            StartCoroutine(attackCoroutine);
         } else {
             if (other.gameObject.TryGetComponent(out player)) {
-                StartCoroutine(Attack(player));
+                attackCoroutine = Attack(player);
+                StartCoroutine(attackCoroutine);
             }
+        }
+    }
+
+    private void OnTriggerExit(Collider other) {
+        if (player != null) {
+            player = null;
+            StopCoroutine(attackCoroutine);
+            isAttack = false;
         }
     }
 

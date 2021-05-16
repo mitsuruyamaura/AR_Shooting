@@ -17,6 +17,10 @@ public class PlayerController : MonoBehaviour
 
     public float shootRange;
 
+    [SerializeField]
+    private UIManager uiManagaer;
+
+
     public int BulletCount
     {
         set {
@@ -26,6 +30,11 @@ public class PlayerController : MonoBehaviour
         get {
             return bulletCount;
         }
+    }
+
+    public int Hp
+    {
+        get { return hp; }
     }
 
     /// <summary>
@@ -41,6 +50,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void CalcHp(int amount) {
         hp = Mathf.Clamp(hp += amount, 0, maxHp);
+        uiManagaer.ReLife(hp);
 
         if (hp <= 0) {
             Debug.Log("Game Over");
@@ -53,5 +63,6 @@ public class PlayerController : MonoBehaviour
     /// <param name="amout"></param>
     public void GainBulletCount(int amout) {
         BulletCount += amout;
+        
     }
 }
