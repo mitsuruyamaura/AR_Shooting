@@ -44,7 +44,6 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text txtARIntroduction;
 
-
     /// <summary>
     /// デバッグ内容を画面表示
     /// </summary>
@@ -58,7 +57,7 @@ public class UIManager : MonoBehaviour
 
 
     void Start() {
-        btnStopMotion.onClick.AddListener(OnClickStopMotion);    
+        btnStopMotion.onClick.AddListener(OnClickStopMotion);
     }
 
 

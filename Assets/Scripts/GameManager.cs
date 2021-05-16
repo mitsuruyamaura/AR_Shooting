@@ -5,16 +5,13 @@ using UnityEngine;
 public class GameManager : MonoBehaviour {
 
     [SerializeField]
-    private EventTriggerPoint[] eventTriggerPoint;
+    private MissionTriggerPoint[] eventTriggerPoint;
 
     [SerializeField]
-    private List<GameObject> enemiesList = new List<GameObject>();
+    private List<EnemyController> enemiesList = new List<EnemyController>();
 
     [SerializeField]
     private List<GameObject> gimmicksList = new List<GameObject>();
-
-    [SerializeField]
-    private GameObject player;
 
     [SerializeField]
     private PathDataSO pathDataSO;
@@ -40,18 +37,24 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     private PlayerController playerController;
 
+    [SerializeField]
+    private int currentMissionDuration;
+
+    [SerializeField]
+    private EventGenerator eventGenerator;
+
 
     IEnumerator Start() {
 
         playerController.SetUpPlayer();
+
+        eventGenerator.SetUpEventGenerator(this, playerController);
 
         // ゲームの準備
         yield return StartCoroutine(PreparateGame());
 
         // 次のルートの確認と設定
         yield return StartCoroutine(CheckNextRootBranch());
-
-
     }
 
     /// <summary>
@@ -60,40 +63,25 @@ public class GameManager : MonoBehaviour {
     /// <returns></returns>
     private IEnumerator PreparateGame() {
         for (int i = 0; i < eventTriggerPoint.Length; i++) {
-            eventTriggerPoint[i].SetUpEventTriggerPoint(this);
+            eventTriggerPoint[i].SetUpMissionTriggerPoint(this);
         }
         yield return null;
     }
 
     /// <summary>
-    /// エネミーの生成イベント
+    /// 敵の情報を List に追加
     /// </summary>
-    /// <param name="enemyEventData"></param>
-    /// <param name="enemyEventTran"></param>
-    public void GenerateEnemy(EventDataSO.EventData enemyEventData, Transform enemyEventTran) {
-        GameObject enemy = Instantiate(enemyEventData.eventPrefab, enemyEventTran);
-        StartCoroutine(enemy.GetComponent<EnemyController>().SetUpEnemyController(player));
-        enemiesList.Add(enemy);
+    /// <param name="enemyController"></param>
+    public void AddEnemyList(EnemyController enemyController) {
+        enemiesList.Add(enemyController);
     }
 
     /// <summary>
-    /// ギミックの生成イベント
+    /// ギミックの情報を List に追加
     /// </summary>
-    /// <param name="enemyEventData"></param>
-    /// <param name="enemyEventTran"></param>
-    public void GenerateGimmick(EventDataSO.EventData enemyEventData, Transform enemyEventTran) {
-        GameObject enemy = Instantiate(enemyEventData.eventPrefab, enemyEventTran);
-        gimmicksList.Add(enemy);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="eventData"></param>
-    /// <param name="eventTran"></param>
-    public void GenerateItem(EventDataSO.EventData eventData, Transform eventTran) {
-        GameObject item = Instantiate(eventData.eventPrefab, eventTran);
-        item.GetComponent<ItemController>().SetUpItem(playerController);
+    /// <param name="gimmick"></param>
+    public void AddGimmickList(GameObject gimmick) {
+        gimmicksList.Add(gimmick);
     }
 
     /// <summary>
@@ -123,7 +111,7 @@ public class GameManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// 
+    /// PathData の List を取得
     /// </summary>
     /// <param name="checkRootNo"></param>
     /// <returns></returns>
@@ -174,9 +162,119 @@ public class GameManager : MonoBehaviour {
 
                 break;
         }
-
-        
+       
         // 次のためにアップ
         currentRailCount++;
+    }
+
+    /// <summary>
+    /// 敵の情報を List から削除し、ミッション内の敵の残数を減らす
+    /// </summary>
+    /// <param name="enemy"></param>
+    public void RemoveEnemyList(EnemyController enemy) {
+        enemiesList.Remove(enemy);
+
+        currentMissionDuration--;
+    }
+
+    /// <summary>
+    /// ミッションの準備
+    /// </summary>
+    /// <param name="missionDuration"></param>
+    /// <param name="clearConditionsType"></param>
+    /// <param name="events"></param>
+    /// <param name="eventTrans"></param>
+    public void PreparateMission(int missionDuration, ClearConditionsType clearConditionsType, (EventType[] eventTypes, int[] eventNos) events, Transform[] eventTrans) {
+
+        // カメラの移動停止
+        fieldAutoScroller.StopAndPlayMotion();
+
+        // ミッションの時間設定
+        currentMissionDuration = missionDuration;
+
+        // ミッション内の各イベントの生成(敵、ギミック、トラップ、アイテムなどを生成)
+        eventGenerator.GenerateEvents(events, eventTrans);
+
+        // ミッション開始
+        StartCoroutine(StartMission(clearConditionsType));
+    }
+
+    /// <summary>
+    /// ミッション開始
+    /// </summary>
+    /// <param name="clearConditionsType"></param>
+    /// <returns></returns>
+    private IEnumerator StartMission(ClearConditionsType clearConditionsType) {
+
+        // ミッションの監視
+        yield return StartCoroutine(ObservateMission(clearConditionsType));
+
+        // ミッション終了
+        EndMission();
+    }
+
+    /// <summary>
+    /// ミッションの監視
+    /// 各イベントの状態を監視
+    /// </summary>
+    /// <param name="clearConditionsType"></param>
+    /// <returns></returns>
+    private IEnumerator ObservateMission(ClearConditionsType clearConditionsType) {
+
+        // クリア条件を満たすまで監視
+        while (currentMissionDuration > 0) {
+
+            // 残り時間を監視する場合
+            if (clearConditionsType == ClearConditionsType.TimeUp) {
+
+                // カウントダウン
+                currentMissionDuration--;
+            }
+
+            yield return null;
+        }
+
+        Debug.Log("ミッション終了");
+    }
+
+    /// <summary>
+    /// ミッション終了
+    /// </summary>
+    public void EndMission() {
+
+        ClearEnemiesList();
+
+        ClearGimmicksList();
+
+        // カメラの移動再開
+        fieldAutoScroller.StopAndPlayMotion();
+    }
+
+    /// <summary>
+    /// 敵の List をクリア
+    /// </summary>
+    private void ClearEnemiesList() {
+
+        if (enemiesList.Count > 0) {
+            for (int i = 0; i < enemiesList.Count; i++) {
+                Destroy(enemiesList[i]);
+            }
+        }
+
+        enemiesList.Clear();
+    }
+
+    /// <summary>
+    /// ギミックの List をクリア
+    /// </summary>
+    private void ClearGimmicksList() {
+
+        if (gimmicksList.Count > 0) {
+            for (int i = 0; i < gimmicksList.Count; i++) {
+                Destroy(gimmicksList[i]);
+            }
+        }
+
+        gimmicksList.Clear();
     }
 }
