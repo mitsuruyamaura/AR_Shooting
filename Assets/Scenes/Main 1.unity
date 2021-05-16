@@ -445,6 +445,7 @@ MonoBehaviour:
   bulletPower: 1
   shootInterval: 0.15
   shootRange: 3000
+  uiManagaer: {fileID: 510689136}
 --- !u!1 &444852544
 GameObject:
   m_ObjectHideFlags: 0
@@ -754,6 +755,10 @@ MonoBehaviour:
   submitBranchNo: 0
   txtARIntroduction: {fileID: 444852546}
   targetIcon: {fileID: 1706870007}
+  lifeTran: {fileID: 1587411943159382244}
+  lifePrefab: {fileID: 586189792301341105, guid: c3b07829cbf1b4b4b97c949d1d5b1935,
+    type: 3}
+  lifesList: []
 --- !u!4 &510689137
 Transform:
   m_ObjectHideFlags: 0
@@ -2330,8 +2335,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2158, y: -1135}
-  m_SizeDelta: {x: 1300, y: 300}
+  m_AnchoredPosition: {x: -1512, y: -1135}
+  m_SizeDelta: {x: 2500, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2052087149
 MonoBehaviour:

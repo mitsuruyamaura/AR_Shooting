@@ -20,9 +20,9 @@ public class BulletGenerator : MonoBehaviour
 
     void Update()
     {
-        if ((arManager != null && arManager.currentARState == ARManager.ARState.Play) || isDebugEditor) {
+        if ((arManager != null && arManager.currentARState == ARState.Play) || isDebugEditor) {
             if (Input.GetMouseButtonDown(0)) {
-                GenerateBullet();
+                //GenerateBullet();
             }
         }
     }

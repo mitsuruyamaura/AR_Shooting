@@ -50,6 +50,10 @@ public class GameManager : MonoBehaviour {
 
         eventGenerator.SetUpEventGenerator(this, playerController);
 
+        uiManager.SetMaxLife(playerController.Hp);
+
+        StartCoroutine(uiManager.GenerateLife(playerController.Hp));
+
         // ƒQ[ƒ€‚Ì€”õ
         yield return StartCoroutine(PreparateGame());
 

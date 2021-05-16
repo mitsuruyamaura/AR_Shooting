@@ -32,16 +32,6 @@ public class ARManager : MonoBehaviour
     [SerializeField]
     private GameObject weaponObj;
 
-    public enum ARState {
-        None,         // Editor でのデバッグ用
-        Tracking,     // 平面感知中
-        Wait,         // 待機。どこのステートにも属さない状態
-        Ready,        // ゲーム準備中
-        Play,         // ゲーム中
-        GameUp,       // ゲーム終了
-
-    }
-
     public ARState currentARState;
 
     public ARStateReactiveProperty ARStateReactiveProperty;
@@ -58,18 +48,18 @@ public class ARManager : MonoBehaviour
     }
 
     IEnumerator Start() {
-        ARStateReactiveProperty = new ARStateReactiveProperty(global::ARState.Tracking);
+        ARStateReactiveProperty = new ARStateReactiveProperty(ARState.Tracking);
 
         // DistinctUntilChanged = 値が変化したときだけ通す
         // Where = 条件式を満たすものだけ通す
         // Subscribe = メッセージの受け取り時に実行するメソッドを登録する(Subject に実行して欲しいメソッドを登録する処理)
-        ARStateReactiveProperty.DistinctUntilChanged().Where(x => x == global::ARState.Ready).Subscribe(_ => StartCoroutine(PraparateGameReady()));
+        ARStateReactiveProperty.DistinctUntilChanged().Where(x => x == ARState.Ready).Subscribe(_ => StartCoroutine(PraparateGameReady()));
 
         yield return new WaitForSeconds(2.0f);
 
         // デバッグ用
-        if (currentARState == ARState.None) {
-            ARStateReactiveProperty.Value = global::ARState.Ready;
+        if (currentARState == ARState.Debug) {
+            ARStateReactiveProperty.Value = ARState.Ready;
         } else if (currentARState == ARState.Tracking) {
             fieldObj.SetActive(false);
             weaponObj.SetActive(false);
@@ -83,7 +73,7 @@ public class ARManager : MonoBehaviour
 
     void Update()
     {
-        if (currentARState == ARState.None) {
+        if (currentARState == ARState.Debug) {
             return;
         }
 
@@ -131,7 +121,7 @@ public class ARManager : MonoBehaviour
                 currentARState = ARState.Ready;
 
                 // UniRX の場合
-                ARStateReactiveProperty.Value = global::ARState.Ready;
+                ARStateReactiveProperty.Value = ARState.Ready;
 
             } else {
                 uiManager.DisplayDebug("Raycast 済");
@@ -152,6 +142,8 @@ public class ARManager : MonoBehaviour
         //yield return new WaitForSeconds(2.0f);
 
         currentARState = ARState.Play;
+
+        ARStateReactiveProperty.Value = ARState.Play;
 
         uiManager.DisplayDebug(currentARState.ToString());
 
