@@ -7,10 +7,10 @@ using UniRx;
 
 public class ARManager : MonoBehaviour
 {
-    [SerializeField, HideInInspector]
-    private GameObject objPrefab = null;
+    //[SerializeField, HideInInspector]
+    //private GameObject objPrefab = null;
 
-    [SerializeField, HideInInspector]
+    [SerializeField]
     private UIManager uiManager;
 
     [SerializeField]
@@ -24,7 +24,13 @@ public class ARManager : MonoBehaviour
 
     private List<ARRaycastHit> raycastHitList = new List<ARRaycastHit>();
 
-    private FieldAutoScroller fieldAutoScroller;
+    //private FieldAutoScroller fieldAutoScroller;
+
+    [SerializeField]
+    private GameManager gameManager;
+
+    [SerializeField]
+    private GameObject weaponObj;
 
     public enum ARState {
         None,         // Editor でのデバッグ用
@@ -48,7 +54,7 @@ public class ARManager : MonoBehaviour
 
         //currentARState = ARState.Tracking;
 
-        fieldAutoScroller = GetComponentInChildren<FieldAutoScroller>();
+        //fieldAutoScroller = GetComponentInChildren<FieldAutoScroller>();
     }
 
     IEnumerator Start() {
@@ -60,6 +66,15 @@ public class ARManager : MonoBehaviour
         ARStateReactiveProperty.DistinctUntilChanged().Where(x => x == global::ARState.Ready).Subscribe(_ => StartCoroutine(PraparateGameReady()));
 
         yield return new WaitForSeconds(2.0f);
+
+        // デバッグ用
+        if (currentARState == ARState.None) {
+            ARStateReactiveProperty.Value = global::ARState.Ready;
+        } else if (currentARState == ARState.Tracking) {
+            fieldObj.SetActive(false);
+            weaponObj.SetActive(false);
+            uiManager.SwitchActivateTargetIcon(false);
+        }
 
         // Debug 用
         //ARStateReactiveProperty.Value = global::ARState.Ready;
@@ -84,7 +99,7 @@ public class ARManager : MonoBehaviour
             uiManager.DisplayDebug(currentARState.ToString());
 
             // ゲーム開始の準備
-            StartCoroutine(PraparateGameReady());
+            //StartCoroutine(PraparateGameReady());
         } else if (currentARState == ARState.Play) {
             //uiManager.DisplayDebug(currentARState.ToString());
         }
@@ -107,7 +122,11 @@ public class ARManager : MonoBehaviour
                 uiManager.DisplayDebug("Raycast 成功");
                 //obj = Instantiate(objPrefab, hitPose.position, hitPose.rotation);
 
+                obj = fieldObj;
+
                 fieldObj.SetActive(true);
+                weaponObj.SetActive(true);
+                uiManager.SwitchActivateTargetIcon(true);
 
                 currentARState = ARState.Ready;
 
@@ -130,7 +149,7 @@ public class ARManager : MonoBehaviour
 
         // TODO 準備処理を書く
 
-        yield return new WaitForSeconds(2.0f);
+        //yield return new WaitForSeconds(2.0f);
 
         currentARState = ARState.Play;
 
@@ -138,9 +157,9 @@ public class ARManager : MonoBehaviour
 
         //StartCoroutine(fieldAutoScroller.StartFieldScroll());
 
-
-
         // 平面検知を非表示
         planeDetection.SetAllPlaneActivate(false);
+
+        yield return StartCoroutine(gameManager.SetStart()); 
     }
 }

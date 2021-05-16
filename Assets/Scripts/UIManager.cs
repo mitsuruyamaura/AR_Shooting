@@ -44,6 +44,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text txtARIntroduction;
 
+    [SerializeField]
+    private GameObject targetIcon;
+
     /// <summary>
     /// デバッグ内容を画面表示
     /// </summary>
@@ -52,6 +55,9 @@ public class UIManager : MonoBehaviour
         txtDebugMessage.text = message;
     }
 
+    public void SwitchActivateTargetIcon(bool isSwitch) {
+        targetIcon.SetActive(isSwitch);
+    }
 
     // mi
 

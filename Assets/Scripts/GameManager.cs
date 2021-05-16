@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour {
     private EventGenerator eventGenerator;
 
 
-    IEnumerator Start() {
+    public IEnumerator SetStart() {
 
         playerController.SetUpPlayer();
 
