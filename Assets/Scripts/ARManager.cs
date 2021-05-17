@@ -49,6 +49,7 @@ public class ARManager : MonoBehaviour
 
     IEnumerator Start() {
         ARStateReactiveProperty = new ARStateReactiveProperty(ARState.Tracking);
+        uiManager.SwitchActivatePlayerInfoSet(false);
 
         // DistinctUntilChanged = 値が変化したときだけ通す
         // Where = 条件式を満たすものだけ通す
@@ -59,11 +60,11 @@ public class ARManager : MonoBehaviour
 
         // デバッグ用
         if (currentARState == ARState.Debug) {
+            
             ARStateReactiveProperty.Value = ARState.Ready;
         } else if (currentARState == ARState.Tracking) {
             fieldObj.SetActive(false);
             weaponObj.SetActive(false);
-            uiManager.SwitchActivateTargetIcon(false);
         }
 
         // Debug 用
@@ -116,7 +117,8 @@ public class ARManager : MonoBehaviour
 
                 fieldObj.SetActive(true);
                 weaponObj.SetActive(true);
-                uiManager.SwitchActivateTargetIcon(true);
+                //uiManager.SwitchActivateTargetIcon(true);
+                
 
                 currentARState = ARState.Ready;
 

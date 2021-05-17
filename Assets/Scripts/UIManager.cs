@@ -59,6 +59,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text txtBulletCount;
 
+    [SerializeField]
+    private GameObject playerInfoSet;
+
     private int maxLifeIcon;
     private int maxBulletCount;
 
@@ -72,6 +75,10 @@ public class UIManager : MonoBehaviour
 
     public void SwitchActivateTargetIcon(bool isSwitch) {
         targetIcon.SetActive(isSwitch);
+    }
+
+    public void SwitchActivatePlayerInfoSet(bool isSwitch) {
+        playerInfoSet.SetActive(isSwitch);
     }
 
     // mi
