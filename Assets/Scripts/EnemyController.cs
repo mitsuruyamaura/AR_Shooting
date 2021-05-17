@@ -83,6 +83,8 @@ public class EnemyController : EventBase<int>
             partsControllersList[i].SetUpPartsController(this);
         }
 
+        anim.SetBool("Walk", true);
+
         yield return null;
 
         //MoveEnemy();
@@ -167,6 +169,7 @@ public class EnemyController : EventBase<int>
         if (hp <= 0) {
 
             anim.ResetTrigger("Attack");
+            anim.SetBool("Walk", false);
 
             anim.SetBool("Down", true);
 

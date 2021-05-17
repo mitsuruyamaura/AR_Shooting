@@ -50,11 +50,18 @@ public class RayController : MonoBehaviour
             return;
         }
 
-        if (playerController.BulletCount > 0 && Input.GetMouseButton(0)) {
+        // ƒŠƒ[ƒh”»’è
+        if (playerController.BulletCount == 0 && playerController.isReloadModeOn && Input.GetMouseButtonDown(0)) {
+            StartCoroutine(playerController.ReloadBullet());
+        }
+
+        if (playerController.BulletCount > 0 && Input.GetMouseButton(0) && !playerController.isReloading) {
 
             // ”­ŽËŽžŠÔ‚ÌŒv‘ª
             StartCoroutine(ShootTimer());
         }
+
+
     }
 
     private IEnumerator ShootTimer() {

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -19,6 +20,12 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private UIManager uiManagaer;
+
+    public bool isReloadModeOn;
+
+    public bool isReloading;
+
+    public float reloadTime;
 
 
     public int BulletCount
@@ -62,8 +69,27 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     /// <param name="amout"></param>
     public void CalcBulletCount(int amout) {
+
         BulletCount += amout;
 
         uiManagaer.UpdateDisplayBulletCount(BulletCount);
+    }
+
+    /// <summary>
+    /// リロード
+    /// </summary>
+    public IEnumerator ReloadBullet() {
+        isReloading = true;
+
+        // リロード
+        BulletCount = maxBullet;
+
+        uiManagaer.UpdateDisplayBulletCount(BulletCount);
+
+        // TODO SE
+
+        yield return new WaitForSeconds(reloadTime);
+
+        isReloading = false;
     }
 }
