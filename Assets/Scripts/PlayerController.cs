@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void CalcHp(int amount) {
         hp = Mathf.Clamp(hp += amount, 0, maxHp);
-        uiManagaer.ReLife(hp);
+        uiManagaer.UpdateDisplayLife(hp);
 
         if (hp <= 0) {
             Debug.Log("Game Over");
@@ -61,8 +61,9 @@ public class PlayerController : MonoBehaviour
     /// ’eŠÛ‰ÁŽZ
     /// </summary>
     /// <param name="amout"></param>
-    public void GainBulletCount(int amout) {
+    public void CalcBulletCount(int amout) {
         BulletCount += amout;
-        
+
+        uiManagaer.UpdateDisplayBulletCount(BulletCount);
     }
 }

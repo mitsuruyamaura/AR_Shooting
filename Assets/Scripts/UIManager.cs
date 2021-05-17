@@ -56,6 +56,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private List<GameObject> lifesList = new List<GameObject>();
 
+    [SerializeField]
+    private Text txtBulletCount;
+
     private int maxLifeIcon;
     private int maxBulletCount;
 
@@ -179,7 +182,7 @@ public class UIManager : MonoBehaviour
     /// ライフの再表示
     /// </summary>
     /// <param name="amout"></param>
-    public void ReLife(int amout) {
+    public void UpdateDisplayLife(int amout) {
 
         for (int i = 0; i < maxLifeIcon; i++) {
 
@@ -188,17 +191,25 @@ public class UIManager : MonoBehaviour
             } else {
                 lifesList[i].SetActive(false);
             }
-
         }
     }
 
     /// <summary>
-    /// ライフ用アイコンの最大値を設定
+    /// ライフ用アイコンの最大値と弾数の最大値を設定
     /// </summary>
     /// <param name="maxHp"></param>
-    public void SetMaxLife(int maxHp, int maxBulletCount) {
+    public void SetPlayerInfo(int maxHp, int maxBulletCount) {
         maxLifeIcon = maxHp;
         this.maxBulletCount = maxBulletCount;
+        UpdateDisplayBulletCount(this.maxBulletCount);
+    }
+
+    /// <summary>
+    /// 弾数表示の更新
+    /// </summary>
+    /// <param name="currentBulletCount"></param>
+    public void UpdateDisplayBulletCount(int currentBulletCount) {
+        txtBulletCount.text = currentBulletCount.ToString() + " / " + maxBulletCount.ToString();
     }
 }
 

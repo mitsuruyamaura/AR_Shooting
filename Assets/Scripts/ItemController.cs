@@ -39,7 +39,7 @@ public class ItemController : EventBase<int>
                 break;
 
             case ItemType.Bullet:
-                playerController.GainBulletCount(itemAmout);
+                playerController.CalcBulletCount(itemAmout);
                 break;
         }
 

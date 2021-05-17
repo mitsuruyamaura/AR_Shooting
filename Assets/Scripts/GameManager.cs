@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour {
 
         eventGenerator.SetUpEventGenerator(this, playerController);
 
-        uiManager.SetMaxLife(playerController.Hp);
+        uiManager.SetPlayerInfo(playerController.Hp, playerController.maxBullet);
 
         StartCoroutine(uiManager.GenerateLife(playerController.Hp));
 

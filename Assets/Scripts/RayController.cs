@@ -135,7 +135,8 @@ public class RayController : MonoBehaviour
             }
         }
 
-        playerController.BulletCount--;
+        playerController.CalcBulletCount(-1);
+        //playerController.BulletCount--;
     }
 
     /// <summary>
