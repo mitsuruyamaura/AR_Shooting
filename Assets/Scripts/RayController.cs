@@ -33,7 +33,7 @@ public class RayController : MonoBehaviour
     private ARManager arManager;
 
     [SerializeField]
-    private PartsController parts;
+    private BodyRegionPartsController parts;
 
     void Start()
     {

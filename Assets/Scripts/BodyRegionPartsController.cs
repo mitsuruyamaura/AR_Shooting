@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PartsController : MonoBehaviour
+public class BodyRegionPartsController : MonoBehaviour
 {
     [SerializeField, Header("•”ˆÊ‚ÌÝ’è")]
-    private BodyPartType bodyPartType;
+    private BodyRegionType bodyPartType;
 
     private EnemyController enemyController;
 
@@ -14,7 +14,7 @@ public class PartsController : MonoBehaviour
         this.enemyController = enemyController;
     }
 
-    public BodyPartType GetBodyPartType() {
+    public BodyRegionType GetBodyPartType() {
         return bodyPartType;
     }
 
@@ -25,7 +25,7 @@ public class PartsController : MonoBehaviour
     public void CalcDamageParts(int damage) {
 
         var lastDamage = bodyPartType switch {
-            BodyPartType.Head => damage * 5,
+            BodyRegionType.Head => damage * 5,
             _ => damage * 1,
         };
 

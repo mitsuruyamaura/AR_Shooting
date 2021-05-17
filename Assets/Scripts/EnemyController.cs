@@ -20,7 +20,7 @@ public class EnemyController : EventBase<int>
     private int attackPower;
 
     [SerializeField]
-    private List<PartsController> partsControllersList = new List<PartsController>();
+    private List<BodyRegionPartsController> partsControllersList = new List<BodyRegionPartsController>();
 
     private NavMeshAgent agent;
 
@@ -161,7 +161,7 @@ public class EnemyController : EventBase<int>
     /// ダメージ計算
     /// </summary>
     /// <param name="damage"></param>
-    public void CalcDamage(int damage, BodyPartType bodyPartType = BodyPartType.Boby) {
+    public void CalcDamage(int damage, BodyRegionType bodyPartType = BodyRegionType.Boby) {
         hp -= damage;
 
         if (hp <= 0) {
@@ -173,10 +173,10 @@ public class EnemyController : EventBase<int>
             gameManager.RemoveEnemyList(this);
 
             // 頭を打って倒した場合
-            if (bodyPartType == BodyPartType.Head) {
+            if (bodyPartType == BodyRegionType.Head) {
 
                 // 頭を消す
-                PartsController parts = partsControllersList.Find(x => x.GetBodyPartType() == bodyPartType);
+                BodyRegionPartsController parts = partsControllersList.Find(x => x.GetBodyPartType() == bodyPartType);
                 parts.gameObject.SetActive(false);
             }
 
