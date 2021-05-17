@@ -32,6 +32,8 @@ public class RayController : MonoBehaviour
     [SerializeField]
     private ARManager arManager;
 
+    [SerializeField]
+    private PartsController parts;
 
     void Start()
     {
@@ -103,12 +105,15 @@ public class RayController : MonoBehaviour
                 // クラスを継承して使うようにして、TryGetComponent の処理を Base を取得して統一する
                 target = hit.collider.gameObject;
 
-                if (target.TryGetComponent(out eventBase)) {
-                    eventBase.TriggerEvent(playerController.bulletPower);
-
-                    // 演出
-                    PlayHitEffect(hit.point, hit.normal);
+                if (target.TryGetComponent(out parts)) {
+                    parts.CalcDamageParts(playerController.bulletPower);
                 }
+                else if (target.TryGetComponent(out eventBase)) {
+                    eventBase.TriggerEvent(playerController.bulletPower);
+                }
+
+                // 演出
+                PlayHitEffect(hit.point, hit.normal);
 
                 //// ダメージ処理
                 //if (target.TryGetComponent(out enemy)) {
@@ -119,13 +124,15 @@ public class RayController : MonoBehaviour
                 //}
                 //　同じ対象の場合
             } else {
-                if (target.TryGetComponent(out eventBase)) {
-                    eventBase.TriggerEvent(playerController.bulletPower);
-
-                    // 演出
-                    PlayHitEffect(hit.point, hit.normal);
-
+                if (target.TryGetComponent(out parts)) {
+                    parts.CalcDamageParts(playerController.bulletPower);
+                } else if (target.TryGetComponent(out eventBase)) {
+                    eventBase.TriggerEvent(playerController.bulletPower);                    
                 }
+
+                // 演出
+                PlayHitEffect(hit.point, hit.normal);
+
                 //if (target.TryGetComponent(out enemy)) {
                 //    enemy.CalcDamage(playerController.bulletPower);
 

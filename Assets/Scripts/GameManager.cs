@@ -52,6 +52,8 @@ public class GameManager : MonoBehaviour {
 
         uiManager.SetPlayerInfo(playerController.Hp, playerController.maxBullet);
 
+        uiManager.SwitchActivatePlayerInfoSet(true);
+
         StartCoroutine(uiManager.GenerateLife(playerController.Hp));
 
         // ƒQ[ƒ€‚Ì€”õ

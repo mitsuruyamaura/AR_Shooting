@@ -1455,6 +1455,7 @@ GameObject:
   - component: {fileID: 40970915652761191}
   - component: {fileID: 2614729796978598542}
   - component: {fileID: 479112445308646799}
+  - component: {fileID: 1272589023344923117}
   m_Layer: 7
   m_Name: Zombie1
   m_TagString: Enemy
@@ -1522,9 +1523,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
-  m_Height: 1.8541634
+  m_Height: 1.567642
   m_Direction: 1
-  m_Center: {x: 0, y: 0.9091095, z: 0}
+  m_Center: {x: 0, y: 0.76584876, z: 0}
 --- !u!114 &40970915652761191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1537,9 +1538,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90f4bfd3f03908d459f0209b086ce405, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 1
+  hp: 10
   attackPower: 1
-  capsuleCollider: {fileID: 2131326226324233653}
+  partsControllersList:
+  - {fileID: 1272589023344923117}
+  - {fileID: 4170997444282825536}
 --- !u!195 &2614729796978598542
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1578,6 +1581,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &1272589023344923117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5047940641189803728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55565d9311cc1e0458639d7611802a7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  partsCollider: {fileID: 9112863320226630037}
+  bodyPartType: 2
+  enemyController: {fileID: 0}
 --- !u!1 &5447071362818561708
 GameObject:
   m_ObjectHideFlags: 0
@@ -1588,7 +1606,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8552416798992355227}
   - component: {fileID: 3215850043875540399}
-  m_Layer: 0
+  - component: {fileID: 3827548638581267388}
+  - component: {fileID: 4170997444282825536}
+  m_Layer: 7
   m_Name: Z_Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1671,6 +1691,35 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.13655424, y: 0.08126316, z: 0.000000037252903}
     m_Extent: {x: 0.15378535, y: 0.12076975, z: 0.08768331}
   m_DirtyAABB: 0
+--- !u!136 &3827548638581267388
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5447071362818561708}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.101929925
+  m_Height: 0.30440086
+  m_Direction: 2
+  m_Center: {x: 0.00094918907, y: -0.019030012, z: 1.6626515}
+--- !u!114 &4170997444282825536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5447071362818561708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55565d9311cc1e0458639d7611802a7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  partsCollider: {fileID: 3827548638581267388}
+  bodyPartType: 0
+  enemyController: {fileID: 0}
 --- !u!1 &5563685847963663489
 GameObject:
   m_ObjectHideFlags: 0

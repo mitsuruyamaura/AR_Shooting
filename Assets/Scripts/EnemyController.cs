@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.AI;
 using System;
+using System.Linq;
 
 public class EnemyController : EventBase<int>
 {
@@ -19,7 +20,7 @@ public class EnemyController : EventBase<int>
     private int attackPower;
 
     [SerializeField]
-    private CapsuleCollider capsuleCollider;
+    private List<PartsController> partsControllersList = new List<PartsController>();
 
     private NavMeshAgent agent;
 
@@ -77,6 +78,10 @@ public class EnemyController : EventBase<int>
         TryGetComponent(out anim);
 
         agent.destination = lookTarget.transform.position;
+
+        for (int i = 0; i < partsControllersList.Count; i++) {
+            partsControllersList[i].SetUpPartsController(this);
+        }
 
         yield return null;
 
@@ -156,14 +161,24 @@ public class EnemyController : EventBase<int>
     /// É_ÉÅÅ[ÉWåvéZ
     /// </summary>
     /// <param name="damage"></param>
-    public void CalcDamage(int damage) {
+    public void CalcDamage(int damage, BodyPartType bodyPartType = BodyPartType.Boby) {
         hp -= damage;
 
         if (hp <= 0) {
 
+            anim.ResetTrigger("Attack");
+
             anim.SetBool("Down", true);
 
             gameManager.RemoveEnemyList(this);
+
+            // ì™Çë≈Ç¡Çƒì|ÇµÇΩèÍçá
+            if (bodyPartType == BodyPartType.Head) {
+
+                // ì™Çè¡Ç∑
+                PartsController parts = partsControllersList.Find(x => x.GetBodyPartType() == bodyPartType);
+                parts.gameObject.SetActive(false);
+            }
 
             Destroy(gameObject, 1.5f);
         }
