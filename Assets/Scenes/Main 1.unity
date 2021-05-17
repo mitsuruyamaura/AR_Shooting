@@ -474,7 +474,7 @@ MonoBehaviour:
   maxBullet: 1000
   bulletPower: 1
   shootInterval: 0.15
-  shootRange: 3000
+  shootRange: 5000
   uiManagaer: {fileID: 510689136}
 --- !u!1 &444852544
 GameObject:

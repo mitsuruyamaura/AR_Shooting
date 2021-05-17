@@ -90,7 +90,7 @@ public class RayController : MonoBehaviour
     }
 
     private void Shoot() {
-        Ray ray = new Ray(transform.position, transform.forward);
+        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
         Debug.DrawRay(ray.origin, ray.direction, Color.blue, 3.0f);
 
         RaycastHit hit;
