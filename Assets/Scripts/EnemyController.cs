@@ -6,6 +6,12 @@ using UnityEngine.AI;
 using System;
 using System.Linq;
 
+public enum EnemyMoveType {
+    Agent,
+    Boss_0,
+    Boss_1
+}
+
 public class EnemyController : EventBase<int>
 {
     private Animator anim;
@@ -38,6 +44,10 @@ public class EnemyController : EventBase<int>
 
     private bool isDead;
 
+    public EnemyMoveType enemyMoveType;
+
+    [SerializeField]
+    private Transform[] moveTrans;
 
 
     public void MoveEnemy() {
@@ -51,9 +61,20 @@ public class EnemyController : EventBase<int>
         //            });
         //    });
 
-        tween = transform.DOMove(lookTarget.transform.position, 5.0f)
-            .SetEase(Ease.Linear)
-            .OnComplete(() => { Destroy(gameObject); });
+        //tween = transform.DOMove(lookTarget.transform.position, 5.0f)
+        //    .SetEase(Ease.Linear)
+        //    .OnComplete(() => { Destroy(gameObject); });
+
+        Sequence sequence = DOTween.Sequence();
+
+        sequence.Append(transform.DOLocalMove(moveTrans[0].localPosition, 3.0f).SetEase(Ease.Linear));
+        sequence.AppendInterval(1.0f);
+        sequence.Append(transform.DOLocalMove(moveTrans[1].localPosition, 3.0f).SetEase(Ease.Linear));
+        sequence.AppendInterval(1.0f);
+        sequence.Append(transform.DOLocalMove(moveTrans[2].localPosition, 3.0f).SetEase(Ease.Linear));
+        sequence.AppendInterval(1.0f).SetLoops(-1, LoopType.Restart);
+
+        tween = sequence;
     }
 
     /// <summary>
@@ -80,10 +101,16 @@ public class EnemyController : EventBase<int>
         lookTarget = playerObj;
         this.gameManager = gameManager;
 
-        TryGetComponent(out agent);
+        //TryGetComponent(out agent);
         TryGetComponent(out anim);
 
-        agent.destination = lookTarget.transform.position;
+        // TODO Type Ç≈ï™äÚÇµÅA Agent ÇÃéûÇ…ÇÕ AddComponet Ç∑ÇÈ
+
+        //agent = gameObject.AddComponent<NavMeshAgent>();
+
+        if (TryGetComponent(out agent)) {
+            agent.destination = lookTarget.transform.position;
+        }
 
         for (int i = 0; i < partsControllersList.Count; i++) {
             partsControllersList[i].SetUpPartsController(this);
@@ -93,6 +120,9 @@ public class EnemyController : EventBase<int>
 
         yield return null;
 
+        if (enemyMoveType == EnemyMoveType.Boss_0) {
+            MoveEnemy();
+        }
         //MoveEnemy();
     }
 
@@ -108,7 +138,7 @@ public class EnemyController : EventBase<int>
             transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, 0.1f);
         }
 
-        if (lookTarget != null) {
+        if (lookTarget != null && agent != null) {
             agent.destination = lookTarget.transform.position;
         }
     }
@@ -176,10 +206,11 @@ public class EnemyController : EventBase<int>
 
         hp -= damage;
 
+        anim.ResetTrigger("Attack");
+
         if (hp <= 0) {
             isDead = true;
 
-            anim.ResetTrigger("Attack");
             anim.SetBool("Walk", false);
 
             anim.SetBool("Down", true);
@@ -200,6 +231,8 @@ public class EnemyController : EventBase<int>
             GameData.instance.scoreReactiveProperty.Value += point;
 
             Destroy(gameObject, 1.5f);
+        } else {
+            anim.SetTrigger("Damage");
         }
     }
 
