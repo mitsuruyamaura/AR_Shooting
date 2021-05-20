@@ -5,12 +5,13 @@ using UnityEngine;
 public enum ItemType {
     LifeUp,
     Bullet,
+    ScoreUp,
 }
 
 
 public class ItemController : EventBase<int>
 {
-    public ItemType itemType;
+    public ItemType itemType;   // TODO ”z—ñ‚É‚µ‚Ä•¡”‚ÌŒø‰Ê‚Ìİ’è‚ğ‰Â”\‚É‚·‚é
 
     public int itemAmout;
 
@@ -40,6 +41,10 @@ public class ItemController : EventBase<int>
 
             case ItemType.Bullet:
                 playerController.CalcBulletCount(itemAmout);
+                break;
+
+            case ItemType.ScoreUp:
+                GameData.instance.scoreReactiveProperty.Value += itemAmout;
                 break;
         }
 
