@@ -6,6 +6,12 @@ using UnityEngine.AI;
 using System;
 using System.Linq;
 
+public enum EnemyMoveType {
+    Agent,
+    Boss_0,
+    Boss_1
+}
+
 public class EnemyController : EventBase<int>
 {
     private Animator anim;
@@ -38,6 +44,10 @@ public class EnemyController : EventBase<int>
 
     private bool isDead;
 
+    public EnemyMoveType enemyMoveType;
+
+    [SerializeField]
+    private Transform[] moveTrans;
 
 
     public void MoveEnemy() {
@@ -51,9 +61,20 @@ public class EnemyController : EventBase<int>
         //            });
         //    });
 
-        tween = transform.DOMove(lookTarget.transform.position, 5.0f)
-            .SetEase(Ease.Linear)
-            .OnComplete(() => { Destroy(gameObject); });
+        //tween = transform.DOMove(lookTarget.transform.position, 5.0f)
+        //    .SetEase(Ease.Linear)
+        //    .OnComplete(() => { Destroy(gameObject); });
+
+        Sequence sequence = DOTween.Sequence();
+
+        sequence.Append(transform.DOLocalMove(moveTrans[0].localPosition, 3.0f).SetEase(Ease.Linear));
+        sequence.AppendInterval(1.0f);
+        sequence.Append(transform.DOLocalMove(moveTrans[1].localPosition, 3.0f).SetEase(Ease.Linear));
+        sequence.AppendInterval(1.0f);
+        sequence.Append(transform.DOLocalMove(moveTrans[2].localPosition, 3.0f).SetEase(Ease.Linear));
+        sequence.AppendInterval(1.0f).SetLoops(-1, LoopType.Restart);
+
+        tween = sequence;
     }
 
     /// <summary>
@@ -83,6 +104,10 @@ public class EnemyController : EventBase<int>
         //TryGetComponent(out agent);
         TryGetComponent(out anim);
 
+        // TODO Type Ç≈ï™äÚÇµÅA Agent ÇÃéûÇ…ÇÕ AddComponet Ç∑ÇÈ
+
+        //agent = gameObject.AddComponent<NavMeshAgent>();
+
         if (TryGetComponent(out agent)) {
             agent.destination = lookTarget.transform.position;
         }
@@ -95,6 +120,9 @@ public class EnemyController : EventBase<int>
 
         yield return null;
 
+        if (enemyMoveType == EnemyMoveType.Boss_0) {
+            MoveEnemy();
+        }
         //MoveEnemy();
     }
 
