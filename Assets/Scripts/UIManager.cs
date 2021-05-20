@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UniRx;
 
 public class UIManager : MonoBehaviour
 {
@@ -65,6 +66,9 @@ public class UIManager : MonoBehaviour
     private int maxLifeIcon;
     private int maxBulletCount;
 
+    [SerializeField]
+    private Text txtScore;
+
     /// <summary>
     /// デバッグ内容を画面表示
     /// </summary>
@@ -86,8 +90,13 @@ public class UIManager : MonoBehaviour
 
     void Start() {
         btnStopMotion.onClick.AddListener(OnClickStopMotion);
+
+        GameData.instance.scoreReactiveProperty.Subscribe(x => UpdateDisplayScore(x));
     }
 
+    private void UpdateDisplayScore(int scoreValue) {
+        txtScore.text = scoreValue.ToString();
+    }
 
     /// <summary>
     /// 一時停止処理の実行

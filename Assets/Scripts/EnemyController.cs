@@ -34,6 +34,12 @@ public class EnemyController : EventBase<int>
 
     private IEnumerator attackCoroutine;
 
+    private int point = 100;
+
+    private bool isDead;
+
+
+
     public void MoveEnemy() {
         //anim = GetComponent<Animator>();
         //anim.SetTrigger("jump");
@@ -164,16 +170,21 @@ public class EnemyController : EventBase<int>
     /// </summary>
     /// <param name="damage"></param>
     public void CalcDamage(int damage, BodyRegionType bodyPartType = BodyRegionType.Boby) {
+        if (isDead) {
+            return;
+        }
+
         hp -= damage;
 
         if (hp <= 0) {
+            isDead = true;
 
             anim.ResetTrigger("Attack");
             anim.SetBool("Walk", false);
 
             anim.SetBool("Down", true);
 
-            gameManager.RemoveEnemyList(this);
+            gameManager.RemoveEnemyList(this);       
 
             // ì™Çë≈Ç¡Çƒì|ÇµÇΩèÍçá
             if (bodyPartType == BodyRegionType.Head) {
@@ -181,7 +192,12 @@ public class EnemyController : EventBase<int>
                 // ì™Çè¡Ç∑
                 BodyRegionPartsController parts = partsControllersList.Find(x => x.GetBodyPartType() == bodyPartType);
                 parts.gameObject.SetActive(false);
+
+                point *= 3;
             }
+
+            // ÉXÉRÉAâ¡éZ
+            GameData.instance.scoreReactiveProperty.Value += point;
 
             Destroy(gameObject, 1.5f);
         }
