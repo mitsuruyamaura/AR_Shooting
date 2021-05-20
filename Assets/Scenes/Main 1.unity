@@ -513,7 +513,7 @@ MonoBehaviour:
   fieldObj: {fileID: 2025421424}
   gameManager: {fileID: 640027474}
   weaponObj: {fileID: 1029627142}
-  currentARState: 0
+  currentARState: 1
   ARStateReactiveProperty:
     value: 0
 --- !u!114 &322517392
@@ -788,6 +788,8 @@ MonoBehaviour:
   hp: 10
   attackPower: 0
   partsControllersList: []
+  enemyMoveType: 0
+  moveTrans: []
 --- !u!65 &510318554
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2651,6 +2653,8 @@ MonoBehaviour:
   hp: 5
   attackPower: 0
   partsControllersList: []
+  enemyMoveType: 0
+  moveTrans: []
 --- !u!1 &1833942391
 GameObject:
   m_ObjectHideFlags: 0
