@@ -80,10 +80,12 @@ public class EnemyController : EventBase<int>
         lookTarget = playerObj;
         this.gameManager = gameManager;
 
-        TryGetComponent(out agent);
+        //TryGetComponent(out agent);
         TryGetComponent(out anim);
 
-        agent.destination = lookTarget.transform.position;
+        if (TryGetComponent(out agent)) {
+            agent.destination = lookTarget.transform.position;
+        }
 
         for (int i = 0; i < partsControllersList.Count; i++) {
             partsControllersList[i].SetUpPartsController(this);
@@ -108,7 +110,7 @@ public class EnemyController : EventBase<int>
             transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, 0.1f);
         }
 
-        if (lookTarget != null) {
+        if (lookTarget != null && agent != null) {
             agent.destination = lookTarget.transform.position;
         }
     }
@@ -176,10 +178,11 @@ public class EnemyController : EventBase<int>
 
         hp -= damage;
 
+        anim.ResetTrigger("Attack");
+
         if (hp <= 0) {
             isDead = true;
 
-            anim.ResetTrigger("Attack");
             anim.SetBool("Walk", false);
 
             anim.SetBool("Down", true);
@@ -200,6 +203,8 @@ public class EnemyController : EventBase<int>
             GameData.instance.scoreReactiveProperty.Value += point;
 
             Destroy(gameObject, 1.5f);
+        } else {
+            anim.SetTrigger("Damage");
         }
     }
 

@@ -46,6 +46,10 @@ public class EventGenerator : MonoBehaviour
                 case EventType.Item:
                     GenerateItem(eventDatas[i], eventTrans[i]);
                     continue;
+
+                case EventType.Boss:
+                    GenerateEnemy(eventDatas[i], eventTrans[i]);
+                    continue;
             }
         }
     }
