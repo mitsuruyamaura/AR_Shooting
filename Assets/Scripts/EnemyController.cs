@@ -49,6 +49,9 @@ public class EnemyController : EventBase<int>
     [SerializeField]
     private Transform[] moveTrans;
 
+    [SerializeField]
+    private BossAction bossAction;
+
 
     public void MoveEnemy() {
         //anim = GetComponent<Animator>();
@@ -116,7 +119,9 @@ public class EnemyController : EventBase<int>
             partsControllersList[i].SetUpPartsController(this);
         }
 
-        anim.SetBool("Walk", true);
+        if (enemyMoveType == EnemyMoveType.Agent) {
+            anim.SetBool("Walk", true);
+        }
 
         yield return null;
 
@@ -165,7 +170,13 @@ public class EnemyController : EventBase<int>
             StartCoroutine(attackCoroutine);
         } else {
             if (other.gameObject.TryGetComponent(out player)) {
-                attackCoroutine = Attack(player);
+
+                if (enemyMoveType == EnemyMoveType.Agent) {
+                    attackCoroutine = Attack(player);
+                } else if (enemyMoveType == EnemyMoveType.Boss_0) {
+                    attackCoroutine = AttackBoss_0();
+                }
+               
                 StartCoroutine(attackCoroutine);
             }
         }
@@ -238,5 +249,23 @@ public class EnemyController : EventBase<int>
 
     public override void TriggerEvent(int value) {
         CalcDamage(value);
+    }
+
+    private IEnumerator AttackBoss_0() {
+        isAttack = true;
+
+        anim.SetTrigger("Attack");
+
+        yield return new WaitForSeconds(bossAction.waitInterval);
+
+        bossAction.GenerateBulletShot(player.transform.position - transform.position, 100, this);
+
+        yield return new WaitForSeconds(attackInterval);
+
+        isAttack = false;
+    }
+
+    public int GetAttackPower() {
+        return attackPower;
     }
 }
