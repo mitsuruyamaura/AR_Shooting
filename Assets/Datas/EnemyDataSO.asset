@@ -9,14 +9,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d99e114432b7af0428c80eac7994e982, type: 3}
+  m_Script: {fileID: 11500000, guid: 09c60239bd34faa4484dfb1a64148de2, type: 3}
   m_Name: EnemyDataSO
   m_EditorClassIdentifier: 
-  eventType: 0
-  eventDatasList:
-  - eventNo: 0
-    eventPrefab: {fileID: 5047940641189803728, guid: ae9ea0112eb35434095ae5ac4393adef,
-      type: 3}
-  - eventNo: 1
-    eventPrefab: {fileID: 6972777735093845580, guid: e212b24701e5553459c0d5aa51009b28,
-      type: 3}
+  enemyDatasList:
+  - enemyName: Zombie
+    enemyMoveType: 0
+    enemyNo: 0
+    hp: 10
+    attackPower: 1
+    moveValue: 1
+    attackInterval: 5
+    point: 150
+  - enemyName: Wizard
+    enemyMoveType: 1
+    enemyNo: 1
+    hp: 30
+    attackPower: 2
+    moveValue: 5
+    attackInterval: 7.5
+    point: 500

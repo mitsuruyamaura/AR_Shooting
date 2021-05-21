@@ -8,7 +8,7 @@ public class DataBaseManager : MonoBehaviour
     public static DataBaseManager instance;
 
     [SerializeField]
-    private EventDataSO enemyDataSO;
+    private EventDataSO enemyEventDataSO;
 
     [SerializeField]
     private EventDataSO gimmickDataSO;
@@ -22,6 +22,10 @@ public class DataBaseManager : MonoBehaviour
     [SerializeField]
     private EventDataSO treasureDataSO;
 
+    [SerializeField]
+    private EnemyDataSO enemyDataSO;
+
+
     void Awake() {
         if (instance == null) {
             instance = this;
@@ -31,10 +35,16 @@ public class DataBaseManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// ƒCƒxƒ“ƒg‚Ìî•ñ‚ğæ“¾
+    /// </summary>
+    /// <param name="eventType"></param>
+    /// <param name="eventNo"></param>
+    /// <returns></returns>
     public EventDataSO.EventData GetEventDataFromEventType(EventType eventType, int eventNo) {
         switch (eventType) {
             case EventType.Enemy:
-                return enemyDataSO.eventDatasList.Find(x => x.eventNo == eventNo);
+                return enemyEventDataSO.eventDatasList.Find(x => x.eventNo == eventNo);
 
             case EventType.Gimmick:
                 return gimmickDataSO.eventDatasList.Find(x => x.eventNo == eventNo);
@@ -51,5 +61,14 @@ public class DataBaseManager : MonoBehaviour
             default:
                 return null;
         }
+    }
+
+    /// <summary>
+    /// “G‚Ìî•ñ‚ğæ“¾
+    /// </summary>
+    /// <param name="searchEnemyNo"></param>
+    /// <returns></returns>
+    public EnemyData GetEnemyData(int searchEnemyNo) {
+        return enemyDataSO.enemyDatasList.Find(x => x.enemyNo == searchEnemyNo);
     }
 }
