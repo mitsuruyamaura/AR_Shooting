@@ -7,6 +7,8 @@ public class BossAction : MonoBehaviour
     [SerializeField]
     private Bullet bulletPrefab;
 
+    private Bullet bullet;
+
     public float waitInterval;
 
     private EnemyController enemyController;
@@ -18,13 +20,15 @@ public class BossAction : MonoBehaviour
     /// <param name="moveSpeed"></param>
     /// <param name="enemyController"></param>
     public void GenerateBulletShot(Vector3 direction, float moveSpeed, EnemyController enemyController) {
+        Debug.Log("bullet genenrate");
+
         this.enemyController = enemyController;
 
-        Bullet bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+        bullet = Instantiate(bulletPrefab, transform.position, bulletPrefab.transform.rotation);
 
-        bullet.GetComponent<Rigidbody>().AddForce(direction * moveSpeed);
+        bullet.damageArea.GetComponent<Rigidbody>().AddForce(direction * moveSpeed);
 
-        Destroy(gameObject, 3.0f);
+        Destroy(bullet, 3.0f);
     }
 
     private void OnTriggerEnter(Collider other) {
@@ -34,7 +38,7 @@ public class BossAction : MonoBehaviour
 
             Debug.Log("ƒqƒbƒg");
 
-            Destroy(gameObject);
+            Destroy(bullet);
         }
     }
 }

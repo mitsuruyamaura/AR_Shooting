@@ -119,7 +119,9 @@ public class EnemyController : EventBase<int>
             partsControllersList[i].SetUpPartsController(this);
         }
 
-        anim.SetBool("Walk", true);
+        if (enemyMoveType == EnemyMoveType.Agent) {
+            anim.SetBool("Walk", true);
+        }
 
         yield return null;
 
@@ -174,8 +176,7 @@ public class EnemyController : EventBase<int>
                 } else if (enemyMoveType == EnemyMoveType.Boss_0) {
                     attackCoroutine = AttackBoss_0();
                 }
-
-                attackCoroutine = Attack(player);
+               
                 StartCoroutine(attackCoroutine);
             }
         }
@@ -257,7 +258,7 @@ public class EnemyController : EventBase<int>
 
         yield return new WaitForSeconds(bossAction.waitInterval);
 
-        bossAction.GenerateBulletShot(transform.forward, 10, this);
+        bossAction.GenerateBulletShot(player.transform.position - transform.position, 100, this);
 
         yield return new WaitForSeconds(attackInterval);
 

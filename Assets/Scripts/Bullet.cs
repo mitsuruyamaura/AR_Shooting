@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
 public class Bullet : MonoBehaviour
 {
     public float shotSpeed;
+
+    public GameObject damageArea;
 
     public void Shot(Vector3 direction) {
         GetComponent<Rigidbody>().AddForce(direction * shotSpeed);
