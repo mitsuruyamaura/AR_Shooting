@@ -49,6 +49,9 @@ public class EnemyController : EventBase<int>
     [SerializeField]
     private Transform[] moveTrans;
 
+    [SerializeField]
+    private BossAction bossAction;
+
 
     public void MoveEnemy() {
         //anim = GetComponent<Animator>();
@@ -165,6 +168,13 @@ public class EnemyController : EventBase<int>
             StartCoroutine(attackCoroutine);
         } else {
             if (other.gameObject.TryGetComponent(out player)) {
+
+                if (enemyMoveType == EnemyMoveType.Agent) {
+                    attackCoroutine = Attack(player);
+                } else if (enemyMoveType == EnemyMoveType.Boss_0) {
+                    attackCoroutine = AttackBoss_0();
+                }
+
                 attackCoroutine = Attack(player);
                 StartCoroutine(attackCoroutine);
             }
@@ -238,5 +248,23 @@ public class EnemyController : EventBase<int>
 
     public override void TriggerEvent(int value) {
         CalcDamage(value);
+    }
+
+    private IEnumerator AttackBoss_0() {
+        isAttack = true;
+
+        anim.SetTrigger("Attack");
+
+        yield return new WaitForSeconds(bossAction.waitInterval);
+
+        bossAction.GenerateBulletShot(transform.forward, 10, this);
+
+        yield return new WaitForSeconds(attackInterval);
+
+        isAttack = false;
+    }
+
+    public int GetAttackPower() {
+        return attackPower;
     }
 }
