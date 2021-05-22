@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6003824264581690443}
   - component: {fileID: 5351740875025472674}
   - component: {fileID: 2627606438944959661}
-  m_Layer: 11
+  m_Layer: 3
   m_Name: Barrel_0001_LifeUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}

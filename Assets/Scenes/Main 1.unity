@@ -587,7 +587,7 @@ MonoBehaviour:
   fieldObj: {fileID: 2025421424}
   gameManager: {fileID: 640027474}
   weaponObj: {fileID: 1029627142}
-  currentARState: 0
+  currentARState: 1
   ARStateReactiveProperty:
     value: 0
 --- !u!114 &322517392
