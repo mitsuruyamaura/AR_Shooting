@@ -11,17 +11,17 @@ public class TargetGenerator : MonoBehaviour
     private Transform animalTran;
 
     void Start() {
-        StartCoroutine(GenerateAnimals());
+        //StartCoroutine(GenerateAnimals());
     }
 
     /// <summary>
     /// ëŒè€ï®ÇÃê∂ê¨
     /// </summary>
     /// <returns></returns>
-    public IEnumerator GenerateAnimals() {
-        while (true) {
-            Instantiate(animalPrefab, animalTran).MoveEnemy();
-            yield return new WaitForSeconds(3.0f);
-        }
-    }
+    //public IEnumerator GenerateAnimals() {
+        //while (true) {
+        //    Instantiate(animalPrefab, animalTran).MoveEnemy();
+        //    yield return new WaitForSeconds(3.0f);
+        //}
+    //}
 }

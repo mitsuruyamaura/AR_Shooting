@@ -47,38 +47,41 @@ public class EnemyController : EventBase<int>
     public EnemyMoveType enemyMoveType;
 
     [SerializeField]
-    private Transform[] moveTrans;
-
-    [SerializeField]
     private BossAction bossAction;
 
+    [SerializeField]
+    private int enemyNo;
 
-    public void MoveEnemy() {
-        //anim = GetComponent<Animator>();
-        //anim.SetTrigger("jump");
-        //tween = transform.DOMoveY(2.5f, 3.0f).SetEase(Ease.InBack)
-        //    .OnComplete(() => {
-        //        transform.DOMoveY(0, 3.0f).SetEase(Ease.InBack)
-        //            .OnComplete(() => {
-        //                Destroy(gameObject);
-        //            });
-        //    });
+    [SerializeField]
+    private EnemyData enemyData;
 
-        //tween = transform.DOMove(lookTarget.transform.position, 5.0f)
-        //    .SetEase(Ease.Linear)
-        //    .OnComplete(() => { Destroy(gameObject); });
 
-        Sequence sequence = DOTween.Sequence();
+    //public void MoveEnemy(float moveTime) {
+    //    //anim = GetComponent<Animator>();
+    //    //anim.SetTrigger("jump");
+    //    //tween = transform.DOMoveY(2.5f, 3.0f).SetEase(Ease.InBack)
+    //    //    .OnComplete(() => {
+    //    //        transform.DOMoveY(0, 3.0f).SetEase(Ease.InBack)
+    //    //            .OnComplete(() => {
+    //    //                Destroy(gameObject);
+    //    //            });
+    //    //    });
 
-        sequence.Append(transform.DOLocalMove(moveTrans[0].localPosition, 3.0f).SetEase(Ease.Linear));
-        sequence.AppendInterval(1.0f);
-        sequence.Append(transform.DOLocalMove(moveTrans[1].localPosition, 3.0f).SetEase(Ease.Linear));
-        sequence.AppendInterval(1.0f);
-        sequence.Append(transform.DOLocalMove(moveTrans[2].localPosition, 3.0f).SetEase(Ease.Linear));
-        sequence.AppendInterval(1.0f).SetLoops(-1, LoopType.Restart);
+    //    //tween = transform.DOMove(lookTarget.transform.position, 5.0f)
+    //    //    .SetEase(Ease.Linear)
+    //    //    .OnComplete(() => { Destroy(gameObject); });
 
-        tween = sequence;
-    }
+    //    Sequence sequence = DOTween.Sequence();
+
+    //    sequence.Append(transform.DOLocalMove(bossAction.moveTrans[0].localPosition, moveTime).SetEase(Ease.Linear));
+    //    sequence.AppendInterval(1.0f);
+    //    sequence.Append(transform.DOLocalMove(bossAction.moveTrans[1].localPosition, moveTime).SetEase(Ease.Linear));
+    //    sequence.AppendInterval(1.0f);
+    //    sequence.Append(transform.DOLocalMove(bossAction.moveTrans[2].localPosition, moveTime).SetEase(Ease.Linear));
+    //    sequence.AppendInterval(1.0f).SetLoops(-1, LoopType.Restart);
+
+    //    tween = sequence;
+    //}
 
     /// <summary>
     /// 移動を一時停止
@@ -104,6 +107,8 @@ public class EnemyController : EventBase<int>
         lookTarget = playerObj;
         this.gameManager = gameManager;
 
+        SetUpEnemyData();
+
         //TryGetComponent(out agent);
         TryGetComponent(out anim);
 
@@ -120,15 +125,35 @@ public class EnemyController : EventBase<int>
         }
 
         if (enemyMoveType == EnemyMoveType.Agent) {
+
+            agent.speed = enemyData.moveValue;
             anim.SetBool("Walk", true);
         }
 
-        yield return null;
-
         if (enemyMoveType == EnemyMoveType.Boss_0) {
-            MoveEnemy();
+            bossAction.SetUpBossAction(this);
+            bossAction.MoveEnemy(enemyData.moveValue);
+
         }
         //MoveEnemy();
+
+        yield return null;
+    }
+
+    /// <summary>
+    /// 敵の情報をデータベースより取得して設定
+    /// </summary>
+    private void SetUpEnemyData() {
+        enemyData = DataBaseManager.instance.GetEnemyData(enemyNo);
+
+        hp = enemyData.hp;
+        attackPower = enemyData.attackPower;
+        attackInterval = enemyData.attackInterval;
+        enemyMoveType = enemyData.enemyMoveType;
+        point = enemyData.point;
+
+        // TODO
+
     }
 
 
@@ -166,8 +191,17 @@ public class EnemyController : EventBase<int>
             return;
         }
 
-        if (player != null) {
+        if (player != null && !isAttack) {
+
+            if (enemyMoveType == EnemyMoveType.Agent) {
+                attackCoroutine = Attack(player);
+            } else if (enemyMoveType == EnemyMoveType.Boss_0) {
+                attackCoroutine = AttackBoss_0();
+            }
+
             StartCoroutine(attackCoroutine);
+
+            Debug.Log("プレイヤー感知済");
         } else {
             if (other.gameObject.TryGetComponent(out player)) {
 
@@ -256,11 +290,15 @@ public class EnemyController : EventBase<int>
 
         anim.SetTrigger("Attack");
 
+        bossAction.capsuleCollider.enabled = false;
+
         yield return new WaitForSeconds(bossAction.waitInterval);
 
-        bossAction.GenerateBulletShot(player.transform.position - transform.position, 100, this);
+        bossAction.GenerateBulletShot(player.transform.position - transform.position, attackPower);
 
         yield return new WaitForSeconds(attackInterval);
+
+        bossAction.capsuleCollider.enabled = true;
 
         isAttack = false;
     }

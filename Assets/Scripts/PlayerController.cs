@@ -57,6 +57,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void CalcHp(int amount) {
         hp = Mathf.Clamp(hp += amount, 0, maxHp);
+
         uiManagaer.UpdateDisplayLife(hp);
 
         if (hp <= 0) {
@@ -91,5 +92,17 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(reloadTime);
 
         isReloading = false;
+    }
+
+    private void OnTriggerEnter(Collider other) {
+
+        // ボスや敵の攻撃範囲を感知しないようにするためにタグでも判定する
+        if (other.gameObject.tag == "Bullet" && other.transform.parent.gameObject.TryGetComponent(out Bullet bullet)) {
+            CalcHp(-bullet.attackPower);
+
+            Destroy(other.gameObject);
+
+            Debug.Log("ヒット");
+        }
     }
 }
