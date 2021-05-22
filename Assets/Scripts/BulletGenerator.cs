@@ -32,6 +32,6 @@ public class BulletGenerator : MonoBehaviour
         Vector3 direction = ray.direction;
 
         Bullet bullet = Instantiate(bulletPrefab);
-        bullet.Shot(direction);
+        //bullet.Shot(direction);
     }
 }
