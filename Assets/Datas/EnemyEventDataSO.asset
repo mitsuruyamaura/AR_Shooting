@@ -20,3 +20,9 @@ MonoBehaviour:
   - eventNo: 1
     eventPrefab: {fileID: 6972777735093845580, guid: e212b24701e5553459c0d5aa51009b28,
       type: 3}
+  - eventNo: 0
+    eventPrefab: {fileID: 5047940641189803728, guid: ae9ea0112eb35434095ae5ac4393adef,
+      type: 3}
+  - eventNo: 0
+    eventPrefab: {fileID: 5047940641189803728, guid: ae9ea0112eb35434095ae5ac4393adef,
+      type: 3}
