@@ -8,4 +8,6 @@ public class PathData {
 
     [Tooltip("ˆÚ“®’n“_")]
     public Transform pathTran;
+
+    public Vector3 cameraRote;
 }

@@ -94,7 +94,7 @@ MonoBehaviour:
   - {fileID: 7531441462245097158}
   - {fileID: 4260284515211409882}
   - {fileID: 3873583543245738487}
-  bulletSpeed: 30
+  bulletSpeed: 15
   capsuleCollider: {fileID: 60308822770211524}
   waitInterval: 0.65
 --- !u!1 &5137104382763664298

@@ -46,9 +46,9 @@ public class RayController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (arManager.ARStateReactiveProperty.Value != ARState.Play) {
-            return;
-        }
+        //if (arManager.ARStateReactiveProperty.Value != ARState.Play) {
+        //    return;
+        //}
 
         // リロード判定
         if (playerController.BulletCount == 0 && playerController.isReloadModeOn && Input.GetMouseButtonDown(0)) {
@@ -97,7 +97,12 @@ public class RayController : MonoBehaviour
     }
 
     private void Shoot() {
-        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+
+        // AR 用　正面のみに Ray を発射
+        //Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+        
+        // MainCamera 用 クリックした位置に Ray を発射
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         Debug.DrawRay(ray.origin, ray.direction, Color.blue, 3.0f);
 
         RaycastHit hit;
@@ -122,13 +127,13 @@ public class RayController : MonoBehaviour
                 // 演出
                 PlayHitEffect(hit.point, hit.normal);
 
-                //// ダメージ処理
-                //if (target.TryGetComponent(out enemy)) {
-                //    enemy.CalcDamage(playerController.bulletPower);
+                // ダメージ処理
+                if (target.TryGetComponent(out enemy)) {
+                    enemy.CalcDamage(playerController.bulletPower);
 
-                //    // 演出
-                //    PlayHitEffect(hit.point, hit.normal);
-                //}
+                    // 演出
+                    PlayHitEffect(hit.point, hit.normal);
+                }
                 //　同じ対象の場合
             } else {
                 if (target.TryGetComponent(out parts)) {
@@ -140,12 +145,12 @@ public class RayController : MonoBehaviour
                 // 演出
                 PlayHitEffect(hit.point, hit.normal);
 
-                //if (target.TryGetComponent(out enemy)) {
-                //    enemy.CalcDamage(playerController.bulletPower);
+                if (target.TryGetComponent(out enemy)) {
+                    enemy.CalcDamage(playerController.bulletPower);
 
-                //    // 演出
-                //    PlayHitEffect(hit.point, hit.normal);
-                //}
+                    // 演出
+                    PlayHitEffect(hit.point, hit.normal);
+                }
             }
         }
 

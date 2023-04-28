@@ -246,6 +246,10 @@ public class EnemyController : EventBase<int>
     /// <param name="damage"></param>
     public void CalcDamage(int damage, BodyRegionType bodyPartType = BodyRegionType.Boby) {
         if (isDead) {
+            anim.ResetTrigger("Attack");
+            anim.SetBool("Walk", false);
+
+            anim.SetBool("Down", true);
             return;
         }
 
@@ -260,7 +264,6 @@ public class EnemyController : EventBase<int>
 
             anim.SetBool("Down", true);
 
-            gameManager.RemoveEnemyList(this);       
 
             // 頭を打って倒した場合
             if (bodyPartType == BodyRegionType.Head) {
@@ -275,7 +278,10 @@ public class EnemyController : EventBase<int>
             // スコア加算
             GameData.instance.scoreReactiveProperty.Value += point;
 
-            Destroy(gameObject, 1.5f);
+            // リストから削除とゲームオブジェクトの破壊
+            gameManager.RemoveEnemyList(this);
+
+            //Destroy(gameObject, 1.5f);　　// ここで消すと List と合わなくなってエラーが出るので止める
         } else {
             anim.SetTrigger("Damage");
         }
@@ -283,6 +289,7 @@ public class EnemyController : EventBase<int>
 
     public override void TriggerEvent(int value) {
         CalcDamage(value);
+        Debug.Log(value);
     }
 
     private IEnumerator AttackBoss_0() {
