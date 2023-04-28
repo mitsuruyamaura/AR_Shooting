@@ -178,6 +178,9 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     /// <param name="enemy"></param>
     public void RemoveEnemyList(EnemyController enemy) {
+
+        Destroy(enemy.gameObject, 1.5f);
+
         enemiesList.Remove(enemy);
 
         currentMissionDuration--;
